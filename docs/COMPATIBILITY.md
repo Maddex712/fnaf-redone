@@ -4,7 +4,7 @@
 
 | Platform | Current status |
 | --- | --- |
-| AYN Thor | Primary development hardware; public preview installed and imported successfully. Both menu screens visually checked. |
+| AYN Thor | Tested hardware; public preview installed and imported successfully. Both menu screens visually checked. |
 | Android 35 emulator | Direct EXE import, Night 1 startup, single-screen routing, and virtual dual-display tests passed. |
 | BlueStacks | Steam EXE import completed successfully in a manual check. |
 | Other Android phones/tablets | Single-screen support included; physical-device testing still needed. |

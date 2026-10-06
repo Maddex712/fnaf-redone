@@ -16,7 +16,7 @@ body:
     id: device
     attributes:
       label: Device and Android version
-      placeholder: AYN Thor, Android version, controller if external
+      placeholder: Handheld model, Android version, controller if external
     validations:
       required: true
   - type: dropdown

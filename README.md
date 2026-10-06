@@ -4,7 +4,7 @@
 
 **Five Nights at Freddy’s 1, with more ways to play on Android.**
 
-Built for AYN Thor. Play on one screen or two. Bring your own Steam copy.
+Built for Android handhelds. Play on one screen or two. Bring your own Steam copy.
 
 [![Preview](https://img.shields.io/badge/release-0.1.2_preview-d8bc7e?style=flat-square)](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.2-preview)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-9bbe91?style=flat-square)](docs/COMPATIBILITY.md)
@@ -57,7 +57,8 @@ Single-screen users can open the same information from **Options → Shift dashb
 ## Get playing
 
 **You need Android 8.0+, 1.5 GB free during setup, and your purchased Windows Steam
-copy of FNaF 1.** AYN Thor is the primary device; single-screen support is included.
+copy of FNaF 1.** Supports single- and dual-screen Android handhelds; see the
+[compatibility notes](docs/COMPATIBILITY.md) for tested hardware.
 
 1. [Download and install the APK](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.2-preview). It appears as **FNaF Redone**.
 2. On your PC, open Steam → FNaF 1 → Manage → **Browse local files**.
