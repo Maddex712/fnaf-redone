@@ -1,3 +1,12 @@
+# 0.2.1 Windows preview — 2026-10-06
+
+- Adds background Steam-library scanning and automatic import of a detected FNaF 1 copy.
+- Finds additional Steam libraries and custom installation folders through Steam metadata.
+- Offers a choice for multiple installations and a manual file-picker fallback.
+- Adds Scan Steam and Browse File buttons to Windows setup; reimport remains in Options.
+- Passes 11 discovery checks and 27 desktop integration checks, including real scan-to-import.
+- Android remains on 0.1.2 preview.
+
 # 0.2.0 Windows preview — 2026-10-06
 
 - Adds a portable Windows x64 client with a bundled Java runtime.

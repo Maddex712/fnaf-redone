@@ -22,6 +22,9 @@ jobs:
       - name: Shared tests
         shell: pwsh
         run: ./Test.ps1
+      - name: Steam library discovery tests
+        shell: pwsh
+        run: ./desktop/Test-SteamLocator.ps1
       - name: Compile and package Windows client
         shell: pwsh
         run: ./desktop/Build-Windows.ps1 -Package

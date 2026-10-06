@@ -6,17 +6,26 @@ Windows Java2D/audio/input adapter. It does not run Android or emulate the APK.
 
 ## Play
 
-1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.0-windows-preview).
+1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.1-windows-preview).
 2. Extract the **entire** ZIP into a folder. Keep `app` and `runtime` beside the EXE.
 3. Run **FNaF Redone.exe**. No separate Java installation is needed.
-4. Choose **New Game → Select Steam File**, then select your installed
-   `FiveNightsatFreddys.exe`. The picker starts in the standard Steam folder when found.
+4. Choose **New Game → Scan Steam** (A / Enter). The client finds your installed
+   FNaF 1 copy and imports it. Use **Browse File** (X / Space) to select an EXE or
+   existing data ZIP yourself.
 5. Wait for **Ready to play** and start the game.
 
 You need Windows 10/11 **64-bit**, your purchased Windows Steam FNaF 1 copy, and
 at least **1.5 GB free** for import. The supported game file is the same as the
 [Android build](../docs/COMPATIBILITY.md#supported-game-file). This preview is not
 code-signed. Verify its SHA-256 against the release checksum file.
+
+The scan checks Steam's registered installation, standard locations, and additional
+libraries listed in `libraryfolders.vdf`, including libraries on other drives.
+It uses FNaF 1's app manifest to find custom installation folders. It runs in the
+background and does not search your whole drive, launch Steam, or require a login.
+If several copies are found, choose one; if none are found, the file picker opens.
+The importer still validates the detected file before replacing existing game data.
+Use **Options → Scan / import Steam copy** to scan again or browse manually.
 
 ## OXP3 controls
 
@@ -87,12 +96,17 @@ This keeps gameplay changes shared instead of maintaining a second game implemen
 The initial Windows preview passed:
 
 - All 31,642 shared JVM assertions.
-- 25 desktop integration checks, including real Steam EXE import (605 images,
+- 27 desktop integration checks, including setup-button scan and automatic Steam EXE import (605 images,
   52 sounds), invalid-replacement recovery, keyboard/controller event routing,
   disconnect behavior, settings persistence, and HiDPI hit coordinates.
 - Windows audio prepare, pause, resume, completion, and release checks.
 - Visual inspection of title, office, cameras, and jumpscare rendering.
 - Launch of the packaged EXE with its bundled runtime on the development PC.
+- 11 library-discovery checks covering secondary and legacy libraries, custom
+  installation folders, duplicate results, missing files, and malformed manifests.
+
+Run `./desktop/Test-SteamLocator.ps1` for the asset-free scan tests. Add `-Installed`
+to also check discovery against your actual Steam installation.
 
 Controller tests inject XInput states into the input adapter; they do not certify
 the OXP3’s physical buttons. Exact pixel/audio timing parity, full-night playthroughs,

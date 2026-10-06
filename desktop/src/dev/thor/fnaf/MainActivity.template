@@ -28,6 +28,8 @@ public final class MainActivity extends Context {
     java.nio.channels.FileChannel lockChannel;
     long lastDisplayCheck;
     String monitorSignature="";
+    boolean scanningSteam;
+    String steamScanStatus="";
     public static void main(String[] args){
         Thread.setDefaultUncaughtExceptionHandler((thread,error)->{
             error.printStackTrace();
@@ -94,6 +96,53 @@ public final class MainActivity extends Context {
         System.exit(0);
     }
     void chooseLocalFile(int request){
+        if(request==10){
+            if(assets.importing||scanningSteam)return;
+            if(assets.ready){
+                int choice=JOptionPane.showOptionDialog(window,"Find your installed FNaF 1 copy or select a file.","Import Steam copy",JOptionPane.DEFAULT_OPTION,JOptionPane.QUESTION_MESSAGE,null,new String[]{"Scan Steam libraries","Browse file","Cancel"},"Scan Steam libraries");
+                if(choice==1){browseLocalFile(10);return;}if(choice!=0)return;
+            }
+            scanSteam();return;
+        }
+        browseLocalFile(request);
+    }
+    void scanSteam(){
+        if(assets.importing||scanningSteam)return;
+        state.pause();releaseInputs();scanningSteam=true;steamScanStatus="Searching Steam libraries...";
+        new SwingWorker<java.util.List<java.nio.file.Path>,Void>(){
+            protected java.util.List<java.nio.file.Path> doInBackground(){return SteamLocator.findInstalled();}
+            protected void done(){
+                scanningSteam=false;if(closed)return;
+                try{
+                    java.util.List<java.nio.file.Path> matches=get();
+                    if(matches.isEmpty()){
+                        steamScanStatus="No installed FNaF 1 copy found. Browse to your Steam EXE.";
+                        JOptionPane.showMessageDialog(window,"FNaF 1 wasn't found in your Steam libraries.\nInstall it in Steam, or select your EXE manually.","Steam scan",JOptionPane.INFORMATION_MESSAGE);
+                        browseLocalFile(10);return;
+                    }
+                    java.nio.file.Path selected=matches.get(0);
+                    if(matches.size()>1){
+                        selected=(java.nio.file.Path)JOptionPane.showInputDialog(window,"Choose the Steam copy to import:","FNaF 1 installations",JOptionPane.QUESTION_MESSAGE,null,matches.toArray(),selected);
+                        if(selected==null){steamScanStatus="Scan cancelled. Your current data is unchanged.";return;}
+                    }
+                    steamScanStatus="Found FNaF 1. Importing your Steam copy...";
+                    importSteamFile(selected.toFile());
+                }catch(Exception e){
+                    steamScanStatus="Scan unavailable. Select your Steam EXE manually.";
+                    browseLocalFile(10);
+                }
+            }
+        }.execute();
+    }
+    void importSteamFile(java.io.File file){
+        audio.stopAll();state.running=false;state.paused=false;showHelp=false;
+        assets.importPack(new android.net.Uri(file),()->SwingUtilities.invokeLater(()->{
+            if(closed)return;assets.warm();steamScanStatus=assets.status;
+            JOptionPane.showMessageDialog(window,assets.status,assets.ready?"Ready to play":"Import failed",assets.ready?JOptionPane.INFORMATION_MESSAGE:JOptionPane.ERROR_MESSAGE);
+        }));
+    }
+    void browseLocalFile(int request){
+        if(scanningSteam)return;
         if(assets.importing)return;state.pause();releaseInputs();
         JFileChooser chooser=new JFileChooser();chooser.setDialogTitle(request==10?"Select your Steam FNaF 1 executable":"Select a local menu font");
         chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(request==10?"FNaF 1 executable or asset pack":"TrueType font",request==10?new String[]{"exe","zip"}:new String[]{"ttf"}));
@@ -101,7 +150,7 @@ public final class MainActivity extends Context {
         if(request==10&&programFiles!=null){java.io.File steam=new java.io.File(programFiles,"Steam/steamapps/common/Five Nights at Freddy's");if(steam.isDirectory())chooser.setCurrentDirectory(steam);}
         if(chooser.showOpenDialog(window)!=JFileChooser.APPROVE_OPTION)return;
         java.io.File file=chooser.getSelectedFile();
-        if(request==10){audio.stopAll();state.running=false;state.paused=false;showHelp=false;assets.importPack(new android.net.Uri(file),()->SwingUtilities.invokeLater(()->{assets.warm();JOptionPane.showMessageDialog(window,assets.status,assets.ready?"Ready to play":"Import failed",assets.ready?JOptionPane.INFORMATION_MESSAGE:JOptionPane.ERROR_MESSAGE);}));}
+        if(request==10){importSteamFile(file);}
         else{
             java.io.File staged=new java.io.File(getFilesDir(),"font-import.tmp");
             try{if(file.length()>4*1024*1024)throw new java.io.IOException("Font must be smaller than 4 MB");java.nio.file.Files.copy(file.toPath(),staged.toPath(),java.nio.file.StandardCopyOption.REPLACE_EXISTING);android.graphics.Typeface face=android.graphics.Typeface.createFromFile(staged);java.nio.file.Files.move(staged.toPath(),new java.io.File(getFilesDir(),"menu-font.ttf").toPath(),java.nio.file.StandardCopyOption.REPLACE_EXISTING);PanelView.menuFont=face;primary.p.setTypeface(face);if(secondary!=null)secondary.p.setTypeface(face);JOptionPane.showMessageDialog(window,"Menu font imported.");}catch(Exception e){JOptionPane.showMessageDialog(window,"Font import failed: "+e.getMessage());}finally{staged.delete();}

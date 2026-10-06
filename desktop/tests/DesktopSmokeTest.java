@@ -25,7 +25,7 @@ public final class DesktopSmokeTest {
     }
     static void key(int k,boolean down){app.handleKey(new KeyEvent(k,down,0));}
     public static void main(String[] args)throws Exception{
-        if(args.length!=2)throw new IllegalArgumentException("Steam EXE and private test output required");
+        if(args.length<2||args.length>3)throw new IllegalArgumentException("Steam EXE and private test output required; optional --scan");
         output=new File(args[1]);output.mkdirs();
         check(System.getProperty("fnaf.dataDir")!=null,"isolated test data directory required");
         BufferedImage dpiImage=new BufferedImage(200,200,BufferedImage.TYPE_INT_ARGB);
@@ -38,7 +38,20 @@ public final class DesktopSmokeTest {
             app.assets=new GameAssets(app);app.audio=new GameAudio(app.assets);app.primary=new PanelView(app,app,true);app.primary.setSize(1280,720);
         });
         CountDownLatch imported=new CountDownLatch(1);
-        edt(()->app.assets.importPack(new android.net.Uri(new File(args[0])),imported::countDown));
+        if(args.length==3&&args[2].equals("--scan")){
+            check(!app.assets.ready,"scan integration requires a fresh isolated data directory");
+            edt(()->{try{
+                app.showHelp=true;render(app.primary,"steam-setup");
+                javax.swing.Timer finish=new javax.swing.Timer(100,e->{
+                    if(!app.assets.importing&&app.assets.ready){
+                        for(java.awt.Window w:java.awt.Window.getWindows())if(w instanceof javax.swing.JDialog)w.dispose();
+                        ((javax.swing.Timer)e.getSource()).stop();imported.countDown();
+                    }
+                });finish.start();
+                key(KeyEvent.KEYCODE_ENTER,true);key(KeyEvent.KEYCODE_ENTER,false);
+                check(app.scanningSteam,"Enter on setup starts background Steam scan");
+            }catch(Exception e){throw new RuntimeException(e);}});
+        }else edt(()->app.assets.importPack(new android.net.Uri(new File(args[0])),imported::countDown));
         check(imported.await(150,TimeUnit.SECONDS),"import completed before timeout");
         check(app.assets.ready,app.assets.status);
         check(new File(app.assets.directory,"Images").list().length==605,"605 images imported");
