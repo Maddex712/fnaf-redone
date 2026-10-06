@@ -6,7 +6,7 @@ Windows Java2D/audio/input adapter. It does not run Android or emulate the APK.
 
 ## Play
 
-1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.1-windows-preview).
+1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.2-windows-preview).
 2. Extract the **entire** ZIP into a folder. Keep `app` and `runtime` beside the EXE.
 3. Run **FNaF Redone.exe**. No separate Java installation is needed.
 4. Choose **New Game → Scan Steam** (A / Enter). The client finds your installed
@@ -57,6 +57,17 @@ multi-touch contacts. A gamepad is recommended for combined actions.
 
 ## Screens, extras, and saves
 
+On every launch, the app detects the current monitor's resolution and aspect ratio.
+It checks again when the window moves or resizes. Title menus and single-screen
+gameplay fit a centered 16:9 viewport on 16:9, 16:10, 19:10, and other displays,
+using black bars where needed to keep artwork proportional. **Options** shows the
+detected display and installed version at the bottom.
+
+**Options → Check for updates** reads the public GitHub releases list in the
+background and selects the newest release with a Windows x64 ZIP. It offers to
+open that release's download page; it does not install updates automatically.
+This is a manual network check. Playing and Steam-file import remain offline.
+
 Single screen is the Windows default. Office and cameras use the full viewport.
 Achievements, challenges, plushies, and the shop remain in the main menu.
 **Options → Shift dashboard** exposes the companion terminal on one display.
@@ -93,10 +104,10 @@ This keeps gameplay changes shared instead of maintaining a second game implemen
 
 ## Validation
 
-The initial Windows preview passed:
+Verification across the Windows previews includes:
 
 - All 31,642 shared JVM assertions.
-- 27 desktop integration checks, including setup-button scan and automatic Steam EXE import (605 images,
+- 35 desktop integration checks in 0.2.2, including real Steam EXE import (605 images,
   52 sounds), invalid-replacement recovery, keyboard/controller event routing,
   disconnect behavior, settings persistence, and HiDPI hit coordinates.
 - Windows audio prepare, pause, resume, completion, and release checks.
@@ -104,9 +115,23 @@ The initial Windows preview passed:
 - Launch of the packaged EXE with its bundled runtime on the development PC.
 - 11 library-discovery checks covering secondary and legacy libraries, custom
   installation folders, duplicate results, missing files, and malformed manifests.
+- 31 display/update checks, plus scheduling tests for EDT confinement, bounded
+  callback backlog, recovery, and shutdown. Live GitHub lookup was checked too.
+
+The 0.2.2 camera-window check on the development PC measured **60.2 presented FPS**
+at a 1904×1041 client size, with a 0.23 ms p95 event-queue delay. Five wall-clock
+seconds advanced the simulation by five seconds. The previous timer path measured
+about 32 FPS on that PC. These measurements are **not OXP3 benchmarks**.
+
+Windows now uses monotonic 60 Hz frame deadlines and polls the controller before
+simulation updates. Rendering uses the GPU where available, falling back to a
+reused 720p composition buffer when drawing remains slow. The fallback scales the
+completed picture, reducing work on high-resolution or unaccelerated displays.
 
 Run `./desktop/Test-SteamLocator.ps1` for the asset-free scan tests. Add `-Installed`
 to also check discovery against your actual Steam installation.
+After building, run `./desktop/Test-Desktop.ps1` for scheduling, aspect-ratio, and
+release-selection tests. Performance probes require a private imported Steam pack.
 
 Controller tests inject XInput states into the input adapter; they do not certify
 the OXP3’s physical buttons. Exact pixel/audio timing parity, full-night playthroughs,

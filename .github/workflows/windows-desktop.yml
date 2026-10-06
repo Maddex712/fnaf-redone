@@ -28,3 +28,6 @@ jobs:
       - name: Compile and package Windows client
         shell: pwsh
         run: ./desktop/Build-Windows.ps1 -Package
+      - name: Frame scheduling, display layout, and update tests
+        shell: pwsh
+        run: ./desktop/Test-Desktop.ps1

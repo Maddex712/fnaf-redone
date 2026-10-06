@@ -1,3 +1,16 @@
+# 0.2.2 Windows preview — 2026-10-06
+
+- Fixes frame pacing with monotonic 60 Hz deadlines and bounded update scheduling.
+- Polls the controller before simulation; idle sticks no longer erase keyboard look.
+- Adds premultiplied image caching, reusable transition layers, and a 720p fallback
+  for sustained slow drawing on high-resolution or unaccelerated displays.
+- Detects display ratio at startup and on window changes, with proportional title-menu fitting.
+- Adds the installed version and display information to Options.
+- Adds a manual GitHub update check that selects Windows releases and opens their download page.
+- Passes 35 desktop integration checks, 31 display/update checks, scheduling tests,
+  and all shared gameplay assertions. OXP3 hardware verification remains pending.
+- Android remains on 0.1.2 preview.
+
 # 0.2.1 Windows preview — 2026-10-06
 
 - Adds background Steam-library scanning and automatic import of a detected FNaF 1 copy.

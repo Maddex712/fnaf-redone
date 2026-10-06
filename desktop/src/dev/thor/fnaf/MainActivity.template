@@ -21,7 +21,10 @@ public final class MainActivity extends Context {
 /* SHARED_FIELDS */
     JFrame window;
     DesktopController controller;
+    final DesktopTiming timing=new DesktopTiming();
+    DesktopFramePump framePump;
     boolean fullscreen,closed;
+    boolean desktopLeft,desktopRight;
     final java.util.Set<Integer> keyboard=new java.util.HashSet<>();
     javax.swing.Timer controllerTimer;
     java.nio.channels.FileLock instanceLock;
@@ -30,6 +33,8 @@ public final class MainActivity extends Context {
     String monitorSignature="";
     boolean scanningSteam;
     String steamScanStatus="";
+    String detectedDisplay="Detecting display";
+    boolean checkingUpdates;
     public static void main(String[] args){
         Thread.setDefaultUncaughtExceptionHandler((thread,error)->{
             error.printStackTrace();
@@ -43,6 +48,7 @@ public final class MainActivity extends Context {
             instanceLock=lockChannel.tryLock();
             if(instanceLock==null){JOptionPane.showMessageDialog(null,"FNaF Redone is already running.");lockChannel.close();return;}
         }catch(Exception e){JOptionPane.showMessageDialog(null,"Cannot open local save directory: "+e.getMessage());return;}
+        Runtime.getRuntime().addShutdownHook(new Thread(timing::close,"Release Windows timer"));
         prefs=new SharedPreferences(getFilesDir());
         progress=new Progress(prefs.getString("progress_v1",null));
         screenMode=ScreenMode.valid(prefs.getInt("screen_mode",ScreenMode.SINGLE));
@@ -64,19 +70,24 @@ public final class MainActivity extends Context {
             return handleKey(new KeyEvent(code,down,repeat));
         });
         window.setVisible(true);primary.requestFocusInWindow();
+        timing.active(true);
         if(prefs.getBoolean("fullscreen",true))toggleFullscreen();
-        resumed=true;connectDisplay();lastFrame=SystemClock.elapsedRealtimeNanos();handler.post(frame);
+        detectDisplay();
+        window.addComponentListener(new java.awt.event.ComponentAdapter(){public void componentMoved(java.awt.event.ComponentEvent e){detectDisplay();}public void componentResized(java.awt.event.ComponentEvent e){detectDisplay();}});
+        resumed=true;connectDisplay();lastFrame=SystemClock.elapsedRealtimeNanos();
         controller=new DesktopController(this);
-        controllerTimer=new javax.swing.Timer(8,e->{
+        framePump=new DesktopFramePump(frame);
+        controllerTimer=new javax.swing.Timer(500,e->{
             if(closed)return;
-            if(focused())controller.poll();else if(!keyboard.isEmpty()||controller.held())loseFocus();
+            if(!focused()&&(!keyboard.isEmpty()||controller.held()))loseFocus();
             long now=SystemClock.uptimeMillis();
             if(now-lastDisplayCheck>1500){lastDisplayCheck=now;String current=displaySignature();if(!current.equals(monitorSignature)){monitorSignature=current;connectDisplay();}}
         });controllerTimer.start();
-        window.addWindowFocusListener(new java.awt.event.WindowAdapter(){public void windowLostFocus(java.awt.event.WindowEvent e){SwingUtilities.invokeLater(()->{if(!focused())loseFocus();});}});
+        window.addWindowFocusListener(new java.awt.event.WindowAdapter(){public void windowGainedFocus(java.awt.event.WindowEvent e){timing.active(true);}public void windowLostFocus(java.awt.event.WindowEvent e){SwingUtilities.invokeLater(()->{if(!focused())loseFocus();});}});
     }
     boolean focused(){return window!=null&&(window.isFocused()||(presentation!=null&&presentation.window.isFocused()));}
-    void loseFocus(){keyboard.clear();releaseInputs();if(controller!=null)controller.reset();primary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(secondary!=null)secondary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(state.active()&&!outro.active())state.pause();audio.pause(true);}
+    void loseFocus(){timing.active(false);keyboard.clear();releaseInputs();if(controller!=null)controller.reset();primary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(secondary!=null)secondary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(state.active()&&!outro.active())state.pause();audio.pause(true);}
+    float desktopLookAxis(float stick){return desktopLeft||desktopRight?(desktopRight?1:0)-(desktopLeft?1:0):Math.abs(stick)>.18f?stick:0;}
     void toggleFullscreen(){fullscreen=!fullscreen;window.dispose();window.setUndecorated(fullscreen);if(fullscreen){Rectangle b=window.getGraphicsConfiguration().getBounds();window.setBounds(b);}else{window.setSize(1280,760);window.setLocationRelativeTo(null);}window.setVisible(true);primary.requestFocusInWindow();prefs.edit().putBoolean("fullscreen",fullscreen).apply();}
     String displaySignature(){StringBuilder b=new StringBuilder();for(GraphicsDevice d:GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices())b.append(d.getIDstring()).append(d.getDefaultConfiguration().getBounds());return b.toString();}
     ArrayList<Display> candidates(){ArrayList<Display> choices=new ArrayList<>();GraphicsDevice current=window.getGraphicsConfiguration().getDevice();GraphicsDevice[] all=GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();for(int i=0;i<all.length;i++)if(!all[i].equals(current))choices.add(new Display(all[i],i));return choices;}
@@ -91,7 +102,7 @@ public final class MainActivity extends Context {
     static final class DesktopPresentation {final Display display;final JFrame window;DesktopPresentation(Display d,PanelView panel){display=d;window=new JFrame("FNaF Redone — Monitor",d.device.getDefaultConfiguration());window.setUndecorated(true);window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);window.setContentPane(panel);window.setBounds(d.device.getDefaultConfiguration().getBounds());window.setVisible(true);}}
     void finish(){
         if(assets.importing){JOptionPane.showMessageDialog(window,"Please let the current import finish before closing.");return;}
-        closed=true;resumed=false;saveProgress();handler.removeCallbacksAndMessages(null);if(controllerTimer!=null)controllerTimer.stop();audio.stopAll();assets.close();dismissDisplay();window.dispose();
+        closed=true;resumed=false;if(framePump!=null)framePump.close();timing.close();saveProgress();handler.removeCallbacksAndMessages(null);if(controllerTimer!=null)controllerTimer.stop();audio.stopAll();assets.close();dismissDisplay();window.dispose();
         try{if(instanceLock!=null)instanceLock.release();if(lockChannel!=null)lockChannel.close();}catch(Exception ignored){}
         System.exit(0);
     }
@@ -157,6 +168,24 @@ public final class MainActivity extends Context {
         }
     }
     String diagnostics(){return displayStatus+"\n"+(controller==null?"Controller initializing":controller.status)+"\n"+assets.status+"\n"+audio.lastError;}
+    void detectDisplay(){
+        java.awt.DisplayMode mode=window.getGraphicsConfiguration().getDevice().getDisplayMode();
+        detectedDisplay="Display: "+DisplayLayout.describe(mode.getWidth(),mode.getHeight())+" / Auto fit";
+    }
+    void checkForUpdates(){
+        if(checkingUpdates)return;checkingUpdates=true;
+        new SwingWorker<ReleaseUpdates.Result,Void>(){
+            protected ReleaseUpdates.Result doInBackground(){return ReleaseUpdates.check(ReleaseConfig.VERSION,"Windows");}
+            protected void done(){
+                checkingUpdates=false;if(closed)return;
+                try{
+                    ReleaseUpdates.Result result=get();
+                    int choice=JOptionPane.showOptionDialog(window,result.message,"FNaF Redone updates",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{result.newer?"Open download page":"Open releases","Close"},"Close");
+                    if(choice==0)java.awt.Desktop.getDesktop().browse(java.net.URI.create(result.url));
+                }catch(Exception e){JOptionPane.showMessageDialog(window,"Could not open the update page. Visit github.com/MjonirMade/fnaf-redone/releases.");}
+            }
+        }.execute();
+    }
 /* SHARED_FRAME */
 /* SHARED_LOGIC */
 /* SHARED_INPUT */

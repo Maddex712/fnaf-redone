@@ -1,6 +1,7 @@
 param([switch]$Package,[string]$OutputDirectory=(Join-Path $PSScriptRoot 'build/dist'))
 $ErrorActionPreference='Stop'
 $root=$PSScriptRoot
+$version=(Get-Content (Join-Path $root 'VERSION') -Raw).Trim()
 $out=Join-Path $root 'build'
 $deps=Join-Path $out 'deps'
 $classes=Join-Path $out 'classes'
@@ -22,7 +23,7 @@ Copy-Item "$deps/*.jar" $inputDir -Force
 if($Package){
     $dest=$OutputDirectory
     if(Test-Path (Join-Path $dest 'FNaF Redone')){throw 'App image already exists; move it aside before packaging again.'}
-    & jpackage --type app-image --name 'FNaF Redone' --app-version '0.2.1' --vendor 'FNaF Redone contributors' --dest $dest --input $inputDir --main-jar fnaf-redone.jar --main-class dev.thor.fnaf.MainActivity --java-options '-Xmx768m' --add-modules java.base,java.desktop,java.logging,java.prefs,java.management,jdk.unsupported
+    & jpackage --type app-image --name 'FNaF Redone' --app-version $version --vendor 'FNaF Redone contributors' --dest $dest --input $inputDir --main-jar fnaf-redone.jar --main-class dev.thor.fnaf.MainActivity --java-options '-Xmx768m' --add-modules java.base,java.desktop,java.logging,java.prefs,java.management,jdk.unsupported,jdk.crypto.ec --jlink-options '--strip-debug --no-man-pages --no-header-files'
     Check 'Package Windows app image'
     $bundle=Join-Path $dest 'FNaF Redone'
     Copy-Item (Join-Path $root 'README.md') (Join-Path $bundle 'START-HERE.md')

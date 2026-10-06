@@ -12,7 +12,7 @@ Single- and dual-screen support. Bring your own Steam copy. Windows x64 client a
 [![Tests](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml)
 [![Code license](https://img.shields.io/badge/code-MIT-a5a9b2?style=flat-square)](LICENSE)
 
-### [Android APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.2-preview/FNaF-Redone-0.1.2-preview.apk) · [Windows ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.1-windows-preview) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
+### [Android APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.2-preview/FNaF-Redone-0.1.2-preview.apk) · [Windows ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.2-windows-preview) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
 
 </div>
 
