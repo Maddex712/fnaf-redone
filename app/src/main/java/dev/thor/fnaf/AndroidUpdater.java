@@ -14,13 +14,18 @@ import org.json.JSONObject;
 final class AndroidUpdater {
     static final int PERMISSION_REQUEST=52,INSTALL_REQUEST=53;
     final MainActivity app;
+    final String installedVersion;
     volatile boolean destroyed,busy;
     AndroidUpdateTransfer transfer;
     AlertDialog dialog;
     boolean waitingPermission;
     AndroidReleases.Result pending;
-    AndroidUpdater(MainActivity app){this.app=app;readPending();}
-    String version(){try{return app.getPackageManager().getPackageInfo(app.getPackageName(),0).versionName;}catch(Exception e){return "unknown";}}
+    AndroidUpdater(MainActivity app){
+        this.app=app;String version;
+        try{version=app.getPackageManager().getPackageInfo(app.getPackageName(),0).versionName;}catch(Exception e){version="unknown";}
+        installedVersion=version;readPending();
+    }
+    String version(){return installedVersion;}
     void close(){destroyed=true;if(transfer!=null)transfer.cancel();if(dialog!=null)dialog.dismiss();}
     void ui(Runnable action){app.runOnUiThread(()->{if(!destroyed&&!app.isFinishing()&&!app.isDestroyed())action.run();});}
     void message(String title,String message){
