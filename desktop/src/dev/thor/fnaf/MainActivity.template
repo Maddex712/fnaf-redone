@@ -23,6 +23,8 @@ public final class MainActivity extends Context {
     DesktopController controller;
     final DesktopTiming timing=new DesktopTiming();
     DesktopFramePump framePump;
+    final DesktopPerformance performance=new DesktopPerformance();
+    int renderMode;
     boolean fullscreen,closed;
     boolean desktopLeft,desktopRight;
     final java.util.Set<Integer> keyboard=new java.util.HashSet<>();
@@ -50,6 +52,7 @@ public final class MainActivity extends Context {
         }catch(Exception e){JOptionPane.showMessageDialog(null,"Cannot open local save directory: "+e.getMessage());return;}
         Runtime.getRuntime().addShutdownHook(new Thread(timing::close,"Release Windows timer"));
         prefs=new SharedPreferences(getFilesDir());
+        renderMode=Math.floorMod(prefs.getInt("render_mode",0),3);
         progress=new Progress(prefs.getString("progress_v1",null));
         screenMode=ScreenMode.valid(prefs.getInt("screen_mode",ScreenMode.SINGLE));
         sensitivity=Math.max(0,Math.min(3,prefs.getInt("sensitivity",2)));state.lookSpeed=LOOK_SPEEDS[sensitivity];
@@ -57,6 +60,7 @@ public final class MainActivity extends Context {
         for(int i=0;i<keys.length;i++)keys[i]=prefs.getInt("key"+i,keys[i]);
         assets=new GameAssets(this);audio=new GameAudio(assets);assets.warm();
         primary=new PanelView(this,this,true);window=new JFrame("FNaF Redone");
+        primary.setRenderMode(renderMode);
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);window.setContentPane(primary);
         primary.setPreferredSize(new java.awt.Dimension(1280,720));window.pack();window.setLocationRelativeTo(null);
         window.addWindowListener(new java.awt.event.WindowAdapter(){public void windowClosing(java.awt.event.WindowEvent e){finish();}});
@@ -76,6 +80,7 @@ public final class MainActivity extends Context {
         window.addComponentListener(new java.awt.event.ComponentAdapter(){public void componentMoved(java.awt.event.ComponentEvent e){detectDisplay();}public void componentResized(java.awt.event.ComponentEvent e){detectDisplay();}});
         resumed=true;connectDisplay();lastFrame=SystemClock.elapsedRealtimeNanos();
         controller=new DesktopController(this);
+        controller.startReader();
         framePump=new DesktopFramePump(frame);
         controllerTimer=new javax.swing.Timer(500,e->{
             if(closed)return;
@@ -86,7 +91,7 @@ public final class MainActivity extends Context {
         window.addWindowFocusListener(new java.awt.event.WindowAdapter(){public void windowGainedFocus(java.awt.event.WindowEvent e){timing.active(true);}public void windowLostFocus(java.awt.event.WindowEvent e){SwingUtilities.invokeLater(()->{if(!focused())loseFocus();});}});
     }
     boolean focused(){return window!=null&&(window.isFocused()||(presentation!=null&&presentation.window.isFocused()));}
-    void loseFocus(){timing.active(false);keyboard.clear();releaseInputs();if(controller!=null)controller.reset();primary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(secondary!=null)secondary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(state.active()&&!outro.active())state.pause();audio.pause(true);}
+    void loseFocus(){timing.active(false);keyboard.clear();releaseInputs();if(controller!=null)controller.suspend();primary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(secondary!=null)secondary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(state.active()&&!outro.active())state.pause();audio.pause(true);}
     float desktopLookAxis(float stick){return desktopLeft||desktopRight?(desktopRight?1:0)-(desktopLeft?1:0):Math.abs(stick)>.18f?stick:0;}
     void toggleFullscreen(){fullscreen=!fullscreen;window.dispose();window.setUndecorated(fullscreen);if(fullscreen){Rectangle b=window.getGraphicsConfiguration().getBounds();window.setBounds(b);}else{window.setSize(1280,760);window.setLocationRelativeTo(null);}window.setVisible(true);primary.requestFocusInWindow();prefs.edit().putBoolean("fullscreen",fullscreen).apply();}
     String displaySignature(){StringBuilder b=new StringBuilder();for(GraphicsDevice d:GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices())b.append(d.getIDstring()).append(d.getDefaultConfiguration().getBounds());return b.toString();}
@@ -97,12 +102,12 @@ public final class MainActivity extends Context {
         if(!ScreenMode.useSecondDisplay(screenMode,!choices.isEmpty())){boolean had=presentation!=null;dismissDisplay();if(had){releaseInputs();state.pause();}displayStatus="Single screen • F11 toggles fullscreen";return;}
         Display target=choices.get(0);for(Display d:choices)if(d.getDisplayId()==selectedDisplay)target=d;
         if(presentation!=null&&presentation.display.device.equals(target.device))return;
-        dismissDisplay();selectedDisplay=target.getDisplayId();secondary=new PanelView(this,this,false);presentation=new DesktopPresentation(target,secondary);displayStatus="Dual screen • "+target.getName();
+        dismissDisplay();selectedDisplay=target.getDisplayId();secondary=new PanelView(this,this,false);secondary.setRenderMode(renderMode);presentation=new DesktopPresentation(target,secondary);displayStatus="Dual screen • "+target.getName();
     }
     static final class DesktopPresentation {final Display display;final JFrame window;DesktopPresentation(Display d,PanelView panel){display=d;window=new JFrame("FNaF Redone — Monitor",d.device.getDefaultConfiguration());window.setUndecorated(true);window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);window.setContentPane(panel);window.setBounds(d.device.getDefaultConfiguration().getBounds());window.setVisible(true);}}
     void finish(){
         if(assets.importing){JOptionPane.showMessageDialog(window,"Please let the current import finish before closing.");return;}
-        closed=true;resumed=false;if(framePump!=null)framePump.close();timing.close();saveProgress();handler.removeCallbacksAndMessages(null);if(controllerTimer!=null)controllerTimer.stop();audio.stopAll();assets.close();dismissDisplay();window.dispose();
+        closed=true;resumed=false;if(framePump!=null)framePump.close();if(controller!=null)controller.close();timing.close();saveProgress();handler.removeCallbacksAndMessages(null);if(controllerTimer!=null)controllerTimer.stop();audio.stopAll();assets.close();dismissDisplay();window.dispose();
         try{if(instanceLock!=null)instanceLock.release();if(lockChannel!=null)lockChannel.close();}catch(Exception ignored){}
         System.exit(0);
     }
@@ -171,6 +176,21 @@ public final class MainActivity extends Context {
     void detectDisplay(){
         java.awt.DisplayMode mode=window.getGraphicsConfiguration().getDevice().getDisplayMode();
         detectedDisplay="Display: "+DisplayLayout.describe(mode.getWidth(),mode.getHeight())+" / Auto fit";
+    }
+    void cycleRenderer(){
+        renderMode=(renderMode+1)%3;primary.setRenderMode(renderMode);if(secondary!=null)secondary.setRenderMode(renderMode);
+        prefs.edit().putInt("render_mode",renderMode).apply();
+    }
+    void showPerformanceReport(){
+        String report="FNaF Redone "+ReleaseConfig.VERSION+"\n"+detectedDisplay+"\n"+
+                "Window: "+primary.getWidth()+" x "+primary.getHeight()+"\n"+
+                "Graphics: "+(window==null?"test":window.getGraphicsConfiguration().getClass().getSimpleName())+"\n"+
+                "Java: "+System.getProperty("java.version")+" / "+System.getProperty("os.arch")+"\n\nLast gameplay:\n"+
+                primary.renderReport()+"\n"+performance.report()+"\n"+
+                (controller==null?"No controller":controller.status+String.format(Locale.US,"\nBackground XInput query: %.2f ms",controller.driverMillis))+"\nAudio: "+(audio.lastError.isEmpty()?"OK":audio.lastError);
+        JTextArea details=new JTextArea(report,17,68);details.setEditable(false);details.setCaretPosition(0);
+        int action=JOptionPane.showOptionDialog(window,new JScrollPane(details),"Performance report",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Copy report","Close"},"Close");
+        if(action==0)java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new java.awt.datatransfer.StringSelection(report),null);
     }
     void checkForUpdates(){
         if(checkingUpdates)return;checkingUpdates=true;

@@ -6,7 +6,7 @@ Windows Java2D/audio/input adapter. It does not run Android or emulate the APK.
 
 ## Play
 
-1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.2-windows-preview).
+1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.3-windows-preview).
 2. Extract the **entire** ZIP into a folder. Keep `app` and `runtime` beside the EXE.
 3. Run **FNaF Redone.exe**. No separate Java installation is needed.
 4. Choose **New Game → Scan Steam** (A / Enter). The client finds your installed
@@ -62,6 +62,16 @@ It checks again when the window moves or resizes. Title menus and single-screen
 gameplay fit a centered 16:9 viewport on 16:9, 16:10, 19:10, and other displays,
 using black bars where needed to keep artwork proportional. **Options** shows the
 detected display and installed version at the bottom.
+
+**Options → Rendering** selects **Handheld (720p)**, **Smooth (720p)**, or **Native**.
+Handheld is the default: it composes at up to 1280×720 and uses fast, sharp scaling.
+Smooth uses filtered scaling; Native draws at the display resolution and depends
+more heavily on the graphics driver. The selection is saved.
+
+If performance is poor, play for a few seconds, then open **Options → Performance /
+controller report → Copy report**. The report preserves recent gameplay frame-rate,
+drawing, scaling, input, and audio timings, along with the version and display size.
+Paste it into a bug report. It stays local unless you choose to share it.
 
 **Options → Check for updates** reads the public GitHub releases list in the
 background and selects the newest release with a Windows x64 ZIP. It offers to
@@ -123,10 +133,15 @@ at a 1904×1041 client size, with a 0.23 ms p95 event-queue delay. Five wall-clo
 seconds advanced the simulation by five seconds. The previous timer path measured
 about 32 FPS on that PC. These measurements are **not OXP3 benchmarks**.
 
-Windows now uses monotonic 60 Hz frame deadlines and polls the controller before
-simulation updates. Rendering uses the GPU where available, falling back to a
-reused 720p composition buffer when drawing remains slow. The fallback scales the
-completed picture, reducing work on high-resolution or unaccelerated displays.
+Windows uses monotonic 60 Hz frame deadlines. Since 0.2.3, controller-driver queries
+run on a separate thread and their ordered input is delivered before simulation.
+Native mode is optional; the default Handheld mode avoids full-resolution scene
+composition and the previous fallback's expensive filtered upscale.
+
+In a software-rendering stress test at 2560×1440, the new Handheld camera path took
+about **6.2 ms** per draw versus about **26 ms** for the old fallback on this PC.
+This is a controlled rendering comparison, **not a confirmed OXP3 fix**. Reported
+OXP3 performance remains unverified until the updated build is tested there.
 
 Run `./desktop/Test-SteamLocator.ps1` for the asset-free scan tests. Add `-Installed`
 to also check discovery against your actual Steam installation.

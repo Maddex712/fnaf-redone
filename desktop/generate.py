@@ -9,6 +9,7 @@ for n in ['PanelView','GameAssets','GameAudio','GameState','Progress','NightIntr
  if n=='ReleaseConfig':
   text=text.replace('static final boolean', f'static final String VERSION="{version}-windows-preview";\n    static final boolean')
  if n=='PanelView':
+  text=text.replace('    void rect(', '    @Override protected boolean recordPerformance(){return app!=null&&app.state.active();}\n    void rect(',1)
   text=text.replace("1. In Steam, browse FNaF 1's installed files.\\n2. Copy FiveNightsatFreddys.exe to this device.\\n3. Select it below. Setup happens here, offline.\\n\\nAn existing FNaF 1 data ZIP also works.\\nNo Steam login or PC extraction tool is needed.", "Install FNaF 1 in Steam, then scan your libraries.\\nA detected copy is imported automatically.\\n\\nYou can also browse to your Steam EXE or data ZIP.\\nSetup works offline. No Steam login is needed.")
   text=text.replace('button("A  SELECT STEAM FILE",45,530,540,55,640,true);', 'button("A / ENTER  SCAN STEAM",45,470,540,55,640,true);\\n                button("X / SPACE  BROWSE FILE",45,535,540,55,641,false);\\n                text(app.steamScanStatus,45,420,16,MUTED);'.replace('\\n','\n'))
   text=text.replace('else if(id==640)app.chooseLocalFile(10);','else if(id==640)app.chooseLocalFile(10);\n        else if(id==641)app.browseLocalFile(10);')
@@ -27,12 +28,17 @@ frame=frame.replace('primary.invalidate()', 'primary.repaint()').replace('second
 frame=frame.replace('handler.postDelayed(this,16);','')
 frame=frame.replace('if (!resumed) return;', '''if (!resumed) return;
         if(!focused()) { timing.active(false);lastFrame=SystemClock.elapsedRealtimeNanos();audio.pause(true);return; }
-        timing.active(true);if(controller!=null)controller.poll();audio.pause(state.paused);''')
+        boolean measured=state.active();long updateStarted=System.nanoTime(),inputStarted=updateStarted;
+        timing.active(true);if(controller!=null){controller.resume();controller.poll();}if(measured)performance.input.add(System.nanoTime()-inputStarted);audio.pause(state.paused);''')
+frame=frame.replace('if(state.running)audio.update(state);', 'if(state.running){long audioStarted=System.nanoTime();audio.update(state);if(measured)performance.audio.add(System.nanoTime()-audioStarted);}')
+frame=frame.replace('primary.repaint();', 'if(measured)performance.updates.add(System.nanoTime()-updateStarted);primary.repaint();')
 logic=s[s.index('    void releaseInputs()'):s.index('    @Override public void onBackPressed')]
 logic=logic.replace('"Import Steam file"','"Scan / import Steam copy"')
-logic=logic.replace('"Import local font","Back"', '"Import local font",checkingUpdates?"Checking GitHub...":"Check for updates","Back"')
-logic=logic.replace('new int[]{17,18,10,2,3,4,5,6,7,16,11}', 'new int[]{17,18,10,2,3,4,5,6,7,16,19,11}')
-logic=logic.replace('case 18:', 'case 19:checkForUpdates();break;\n            case 18:')
+logic=logic.replace('"Import local font","Back"', '"Import local font",checkingUpdates?"Checking GitHub...":"Check for updates","Rendering: "+android.view.View.RENDER_MODES[renderMode],"Back"')
+logic=logic.replace('"Controller check"', '"Performance / controller report"')
+logic=logic.replace('new int[]{17,18,10,2,3,4,5,6,7,16,11}', 'new int[]{17,18,10,2,3,4,5,6,7,16,19,20,11}')
+logic=logic.replace('case 4: diagnostic = true; break;', 'case 4:showPerformanceReport();break;')
+logic=logic.replace('case 18:', 'case 20:cycleRenderer();break;\n            case 19:checkForUpdates();break;\n            case 18:')
 logic=logic.replace('void releaseInputs() {', 'void releaseInputs() { desktopLeft=desktopRight=false;')
 inputs=s[s.index('    boolean handleKey('):s.index('    String diagnostics()')]
 inputs=inputs.replace('if(assets.importing)return true;','if(assets.importing||scanningSteam)return true;')

@@ -1,3 +1,16 @@
+# 0.2.3 Windows preview — 2026-10-06
+
+- Responds to continuing OXP3 slowdown with a default Handheld rendering mode:
+  bounded 720p composition and fast scaling instead of the old filtered fallback.
+- Adds saved Smooth and Native rendering alternatives in Options.
+- Moves native XInput queries off the game/UI thread, preserves ordered button
+  edges, and discards queued input when focus is lost.
+- Avoids redundant native audio-volume changes each frame.
+- Adds a copyable performance/controller report with recent gameplay timings.
+- Controller-reader, audio, display/update, scheduling, and integration checks pass.
+  OXP3 hardware performance still needs verification; this release does not claim it is resolved.
+- Android is unchanged.
+
 # 0.2.2 Windows preview — 2026-10-06
 
 - Fixes frame pacing with monotonic 60 Hz deadlines and bounded update scheduling.
