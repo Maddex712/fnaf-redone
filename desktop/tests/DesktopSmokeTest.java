@@ -62,12 +62,12 @@ public final class DesktopSmokeTest {
             app.back();check(!app.options,"Back closes Options");
             app.openOptions();app.primary.setSize(1280,800);app.detectedDisplay="Display: 1280 x 800 / 16:10 / Auto fit";
             check(app.menuItems()[10].equals("Check for updates")&&app.menuActions()[10]==19,"update option routes correctly");
-            check(app.menuActions()[11]==20&&app.menuActions()[12]==11,"rendering option and Back remain available");
+            check(app.menuActions()[11]==20&&app.menuActions()[12]==21&&app.menuActions()[13]==11,"rendering option and Back remain available");
             render(app.primary,"options-16-10");app.back();app.primary.setSize(1280,720);
-            app.cycleRenderer();check(app.renderMode==1&&app.primary.renderReport().contains("Smooth"),"renderer switches to Smooth");
+            app.cycleRenderer();check(app.renderMode==1&&app.primary.renderReport().contains("720p"),"renderer switches to 720p");
             check(app.prefs.getInt("render_mode",-1)==1,"rendering preference is saved");
             app.cycleRenderer();check(app.renderMode==2&&app.primary.renderReport().contains("Native"),"renderer switches to Native");
-            app.cycleRenderer();check(app.renderMode==0&&app.primary.renderReport().contains("Handheld"),"renderer returns to Handheld");
+            app.cycleRenderer();check(app.renderMode==0&&app.primary.renderReport().contains("1080p"),"renderer returns to 1080p");
             app.state.start(1);app.state.elapsed=1;app.state.sounds.clear();
             key(KeyEvent.KEYCODE_BUTTON_L1,true);check(app.state.leftDoor,"L1 closes left door");key(KeyEvent.KEYCODE_BUTTON_L1,false);
             key(KeyEvent.KEYCODE_BUTTON_L2,true);check(app.state.leftLight,"trigger holds left light");key(KeyEvent.KEYCODE_BUTTON_L2,false);check(!app.state.leftLight,"trigger release clears light");

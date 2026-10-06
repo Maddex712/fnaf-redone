@@ -18,32 +18,33 @@ for n in ['PanelView','GameAssets','GameAudio','GameState','Progress','NightIntr
   text=text.replace('Touch controls work on both screens.', 'Mouse/touch: click controls. F11: fullscreen.')
   text=text.replace('Native dual-screen build.', 'Windows single-/dual-screen build.')
   text=text.replace('c.save();c.scale(getWidth()/1000f,getHeight()/650f);', 'c.save();float[] viewport=DisplayLayout.fit(getWidth(),getHeight());c.translate(viewport[0],viewport[1]);c.scale(viewport[2]/1000f,viewport[3]/650f);')
-  text=text.replace('if(!app.assets.ready)text("Select New Game', 'if(app.options){text("FNaF Redone "+ReleaseConfig.VERSION,45,610,17,MUTED);text(app.detectedDisplay,45,636,16,MUTED);}\n            if(!app.assets.ready&&!app.options)text("Select New Game')
+  text=text.replace('if(!app.assets.ready&&!app.options)text("Select New Game', 'if(app.options){text("FNaF Redone "+ReleaseConfig.VERSION,45,608,15,MUTED);text(app.detectedDisplay,45,625,14,MUTED);}\n            if(!app.assets.ready&&!app.options)text("Select New Game')
  (out/(n+'.java')).write_text(text,encoding='utf-8')
 s=(source/'MainActivity.java').read_text(encoding='utf-8-sig')
-fields=s[s.index('    static final double MENU_REVEAL_DURATION'):s.index('    @Override public void onCreate')]
+fields=s[s.index('    static final double MENU_REVEAL_DURATION'):s.index('    void openProjectPage()')]
 fields=fields.replace('    DisplayManager displays;','').replace('Presentation presentation;', 'DesktopPresentation presentation;')
 frame=s[s.index('    final Runnable frame ='):s.index('    void dismissDisplay()')]
 frame=frame.replace('primary.invalidate()', 'primary.repaint()').replace('secondary.invalidate()', 'secondary.repaint()')
 frame=frame.replace('handler.postDelayed(this,16);','')
 frame=frame.replace('if (!resumed) return;', '''if (!resumed) return;
         if(!focused()) { timing.active(false);lastFrame=SystemClock.elapsedRealtimeNanos();audio.pause(true);return; }
-        boolean measured=state.active();long updateStarted=System.nanoTime(),inputStarted=updateStarted;
+        boolean measured=state.active();performance.frame(System.nanoTime(),measured);long updateStarted=System.nanoTime(),inputStarted=updateStarted;
         timing.active(true);if(controller!=null){controller.resume();controller.poll();}if(measured)performance.input.add(System.nanoTime()-inputStarted);audio.pause(state.paused);''')
 frame=frame.replace('if(state.running)audio.update(state);', 'if(state.running){long audioStarted=System.nanoTime();audio.update(state);if(measured)performance.audio.add(System.nanoTime()-audioStarted);}')
 frame=frame.replace('primary.repaint();', 'if(measured)performance.updates.add(System.nanoTime()-updateStarted);primary.repaint();')
 logic=s[s.index('    void releaseInputs()'):s.index('    @Override public void onBackPressed')]
 logic=logic.replace('"Import Steam file"','"Scan / import Steam copy"')
-logic=logic.replace('"Import local font","Back"', '"Import local font",checkingUpdates?"Checking GitHub...":"Check for updates","Rendering: "+android.view.View.RENDER_MODES[renderMode],"Back"')
+logic=logic.replace('"Import local font","GitHub project","Back"', '"Import local font",checkingUpdates?"Checking GitHub...":"Check for updates","Rendering: "+android.view.View.RENDER_MODES[renderMode],"GitHub project","Back"')
 logic=logic.replace('"Controller check"', '"Performance / controller report"')
-logic=logic.replace('new int[]{17,18,10,2,3,4,5,6,7,16,11}', 'new int[]{17,18,10,2,3,4,5,6,7,16,19,20,11}')
+logic=logic.replace('new int[]{17,18,10,2,3,4,5,6,7,16,21,11}', 'new int[]{17,18,10,2,3,4,5,6,7,16,19,20,21,11}')
 logic=logic.replace('case 4: diagnostic = true; break;', 'case 4:showPerformanceReport();break;')
 logic=logic.replace('case 18:', 'case 20:cycleRenderer();break;\n            case 19:checkForUpdates();break;\n            case 18:')
 logic=logic.replace('void releaseInputs() {', 'void releaseInputs() { desktopLeft=desktopRight=false;')
 inputs=s[s.index('    boolean handleKey('):s.index('    String diagnostics()')]
 inputs=inputs.replace('if(assets.importing)return true;','if(assets.importing||scanningSteam)return true;')
 inputs=inputs.replace('state.axis=down?(k==KeyEvent.KEYCODE_A?-1:1):0;', 'if(k==KeyEvent.KEYCODE_A)desktopLeft=down;else desktopRight=down;state.axis=desktopLookAxis(controller==null?0:controller.axisX);')
-inputs=inputs.replace('state.axis=x;', 'state.axis=desktopLookAxis(x);')
+inputs=inputs.replace('state.axis=x;', 'state.axis=desktopLookAxis(x);menuNavigation.reset();')
+inputs=inputs.replace('if(nav!=0 && now-lastNavigation>220) { navigate(nav>0?1:-1);lastNavigation=now; }','int step=menuNavigation.step(nav,now);if(step!=0)navigate(step);')
 inputs=inputs.replace('if(k==KeyEvent.KEYCODE_BUTTON_B)back();\n                else if(showHelp', 'if(k==KeyEvent.KEYCODE_BUTTON_B)back();\n                else if(showHelp&&!assets.ready&&k==KeyEvent.KEYCODE_BUTTON_X)browseLocalFile(10);\n                else if(showHelp')
 ending=s[s.index('    void completeOutro()'):s.rfind('}')]
 template=(root/'src/dev/thor/fnaf/MainActivity.template').read_text(encoding='utf-8')

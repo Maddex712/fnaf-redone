@@ -25,6 +25,7 @@ public final class MainActivity extends Context {
     DesktopFramePump framePump;
     final DesktopPerformance performance=new DesktopPerformance();
     int renderMode;
+    final DesktopMenuNavigation menuNavigation=new DesktopMenuNavigation();
     boolean fullscreen,closed;
     boolean desktopLeft,desktopRight;
     final java.util.Set<Integer> keyboard=new java.util.HashSet<>();
@@ -185,12 +186,17 @@ public final class MainActivity extends Context {
         String report="FNaF Redone "+ReleaseConfig.VERSION+"\n"+detectedDisplay+"\n"+
                 "Window: "+primary.getWidth()+" x "+primary.getHeight()+"\n"+
                 "Graphics: "+(window==null?"test":window.getGraphicsConfiguration().getClass().getSimpleName())+"\n"+
+                "Windows scale: "+window.getGraphicsConfiguration().getDefaultTransform().getScaleX()+"x\n"+
                 "Java: "+System.getProperty("java.version")+" / "+System.getProperty("os.arch")+"\n\nLast gameplay:\n"+
                 primary.renderReport()+"\n"+performance.report()+"\n"+
-                (controller==null?"No controller":controller.status+String.format(Locale.US,"\nBackground XInput query: %.2f ms",controller.driverMillis))+"\nAudio: "+(audio.lastError.isEmpty()?"OK":audio.lastError);
+                (controller==null?"No controller":controller.status+String.format(Locale.US,"\nBackground XInput query: %.2f ms",controller.driverMillis)+String.format(Locale.US,"\nStick: %+.2f, %+.2f / buttons: 0x%04X",controller.axisX,controller.axisY,controller.buttons))+"\nAudio: "+(audio.lastError.isEmpty()?"OK":audio.lastError);
         JTextArea details=new JTextArea(report,17,68);details.setEditable(false);details.setCaretPosition(0);
         int action=JOptionPane.showOptionDialog(window,new JScrollPane(details),"Performance report",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Copy report","Close"},"Close");
         if(action==0)java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new java.awt.datatransfer.StringSelection(report),null);
+    }
+    void openProjectPage(){
+        try{java.awt.Desktop.getDesktop().browse(java.net.URI.create("https://github.com/MjonirMade/fnaf-redone"));}
+        catch(Exception e){JOptionPane.showMessageDialog(window,"Could not open your browser. Visit github.com/MjonirMade/fnaf-redone.");}
     }
     void checkForUpdates(){
         if(checkingUpdates)return;checkingUpdates=true;

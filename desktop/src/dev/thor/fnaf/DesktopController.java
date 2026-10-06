@@ -48,9 +48,10 @@ final class DesktopController {
     void poll(){
         if(api==null)return;
         if(reader==null){byte[] packet=readPacket();if(packet!=null)apply(packet);return;}
-        byte[] packet;int count=0;while(count++<64&&(packet=packets.poll())!=null)apply(packet);
+        byte[] packet,last=null;int count=0;while(count++<64&&(packet=packets.poll())!=null){applyButtons(packet);last=packet;}if(last!=null&&active>=0)applyMotion(last);
     }
-    void apply(byte[] packet){
+    void apply(byte[] packet){applyButtons(packet);if(active>=0)applyMotion(packet);}
+    void applyButtons(byte[] packet){
         int found=packet[16];
         if(found<0){if(active>=0){app.releaseInputs();app.state.pause();reset();status="Controller disconnected • paused";}active=-1;return;}
         active=found;status="XInput controller "+(active+1)+" connected";
@@ -63,6 +64,10 @@ final class DesktopController {
         if(l!=leftTrigger)app.handleKey(new KeyEvent(KeyEvent.KEYCODE_BUTTON_L2,l,0));
         if(r!=rightTrigger)app.handleKey(new KeyEvent(KeyEvent.KEYCODE_BUTTON_R2,r,0));
         buttons=next;leftTrigger=l;rightTrigger=r;
+    }
+    void applyMotion(byte[] packet){
+        java.nio.ByteBuffer data=java.nio.ByteBuffer.wrap(packet).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+        float lt=(data.get(6)&255)/255f,rt=(data.get(7)&255)/255f;
         axisX=Math.max(-1,data.getShort(8)/32767f);axisY=-Math.max(-1,data.getShort(10)/32767f);
         MotionEvent e=new MotionEvent(MotionEvent.ACTION_MOVE,0,0);e.axes[MotionEvent.AXIS_X]=axisX;e.axes[MotionEvent.AXIS_Y]=axisY;e.axes[MotionEvent.AXIS_LTRIGGER]=lt;e.axes[MotionEvent.AXIS_RTRIGGER]=rt;
         // D-pad comes through button events only, avoiding double camera switches.

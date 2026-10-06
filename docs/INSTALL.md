@@ -13,7 +13,7 @@ include the original game's gameplay images or audio.
 
 ## First launch
 
-1. Download the APK from [Releases](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.2-preview).
+1. Download the APK from [Releases](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.3-preview).
 2. Install it on Android. It appears as **FNaF Redone**. Allow installation
    from your chosen browser/file manager if Android prompts you.
 3. On your PC, open Steam → Library → Five Nights at Freddy’s → Manage →

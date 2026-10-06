@@ -6,7 +6,7 @@ Windows Java2D/audio/input adapter. It does not run Android or emulate the APK.
 
 ## Play
 
-1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.3-windows-preview).
+1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.4-windows-preview).
 2. Extract the **entire** ZIP into a folder. Keep `app` and `runtime` beside the EXE.
 3. Run **FNaF Redone.exe**. No separate Java installation is needed.
 4. Choose **New Game → Scan Steam** (A / Enter). The client finds your installed
@@ -63,15 +63,25 @@ gameplay fit a centered 16:9 viewport on 16:9, 16:10, 19:10, and other displays,
 using black bars where needed to keep artwork proportional. **Options** shows the
 detected display and installed version at the bottom.
 
-**Options → Rendering** selects **Handheld (720p)**, **Smooth (720p)**, or **Native**.
-Handheld is the default: it composes at up to 1280×720 and uses fast, sharp scaling.
-Smooth uses filtered scaling; Native draws at the display resolution and depends
-more heavily on the graphics driver. The selection is saved.
+**Options → Rendering** selects **1080p** (default), **720p**, or **Native**.
+1080p composes at up to 1920×1080 physical pixels, accounting for Windows display
+scaling. It reuses resized artwork while panning instead of resampling large images
+every frame. Larger displays scale the completed frame; Native draws at the display
+resolution. The selection is saved. Existing default Handheld settings now use
+1080p; choose it explicitly if you previously selected a different mode.
+
+Audio driver operations run off the game thread. Analog motion uses the newest
+sample each frame, while button presses/releases remain ordered. Menu sticks have
+a separate activation threshold and repeat delay to resist drift.
 
 If performance is poor, play for a few seconds, then open **Options → Performance /
 controller report → Copy report**. The report preserves recent gameplay frame-rate,
-drawing, scaling, input, and audio timings, along with the version and display size.
+drawing, scaling, input, and audio-dispatch timings, along with update intervals,
+Windows scaling, stick state, version, and display size.
 Paste it into a bug report. It stays local unless you choose to share it.
+
+**Options → GitHub project** opens this repository in your browser. Settings also
+credits Scott Cawthon and identifies this as an unofficial fan project.
 
 **Options → Check for updates** reads the public GitHub releases list in the
 background and selects the newest release with a Windows x64 ZIP. It offers to

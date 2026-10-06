@@ -24,5 +24,12 @@ public class Canvas {
  public void drawLine(float x,float y,float xx,float yy,Paint p){setup(p,false);g.draw(new Line2D.Float(x,y,xx,yy));}
  public void drawText(String s,float x,float y,Paint p){setup(p,false);g.setFont(p.typeface.font.deriveFont(p.textSize));g.drawString(s,x,y);}
  public void drawBitmap(Bitmap b,float x,float y,Paint p){drawBitmap(b,null,new RectF(x,y,x+b.getWidth(),y+b.getHeight()),p);}
- public void drawBitmap(Bitmap b,Rect src,RectF dst,Paint p){if(b==null)return;setup(p,true);BufferedImage img=b.filtered(p.colorFilter);Graphics2D v=(Graphics2D)g.create();v.clip(new Rectangle2D.Float(dst.left,dst.top,dst.width(),dst.height()));int sx=src==null?0:src.left,sy=src==null?0:src.top,sw=src==null?b.getWidth():src.right-src.left,sh=src==null?b.getHeight():src.bottom-src.top;v.translate(dst.left,dst.top);v.scale(dst.width()/sw,dst.height()/sh);v.translate(-sx,-sy);v.drawImage(img,0,0,null);v.dispose();}
+ public void drawBitmap(Bitmap b,Rect src,RectF dst,Paint p){if(b==null)return;setup(p,true);BufferedImage img=b.filtered(p.colorFilter);Graphics2D v=(Graphics2D)g.create();v.clip(new Rectangle2D.Float(dst.left,dst.top,dst.width(),dst.height()));int sx=src==null?0:src.left,sy=src==null?0:src.top,sw=src==null?b.getWidth():src.right-src.left,sh=src==null?b.getHeight():src.bottom-src.top;v.translate(dst.left,dst.top);v.scale(dst.width()/sw,dst.height()/sh);v.translate(-sx,-sy);AffineTransform tx=v.getTransform();
+ // Software affine blits resampled every pixel on every pan, blocking input on the EDT.
+ // Cache scale separately from translation; retain crop/alpha in device space.
+ if(v.getDeviceConfiguration().getDevice().getType()==GraphicsDevice.TYPE_IMAGE_BUFFER&&tx.getShearX()==0&&tx.getShearY()==0&&tx.getScaleX()>0&&tx.getScaleY()>0){
+  BufferedImage scaled=ScaledImages.get(img,(int)Math.round(img.getWidth()*tx.getScaleX()),(int)Math.round(img.getHeight()*tx.getScaleY()),p.filter);
+  if(scaled!=null){Shape clip=v.getClip();v.setTransform(new AffineTransform());if(clip!=null)v.setClip(tx.createTransformedShape(clip));v.drawImage(scaled,(int)Math.round(tx.getTranslateX()),(int)Math.round(tx.getTranslateY()),null);v.dispose();return;}
+ }
+ v.drawImage(img,0,0,null);v.dispose();}
 }

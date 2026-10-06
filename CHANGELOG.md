@@ -1,3 +1,20 @@
+# 0.2.4 Windows preview / 0.1.3 Android preview — 2026-10-06
+
+- Windows defaults to 1080p composition, including on HiDPI displays. The previous
+  default 720p mode now becomes 1080p; 720p and Native remain optional.
+- Caches resized artwork independently of camera position, with a bounded cache.
+  In a paired local 1080p draw benchmark, camera median fell from 32.63 ms to 7.96 ms.
+  This is a rendering measurement on the development PC, not an OXP3 FPS claim.
+- Moves Windows native audio start/pause/volume/stop/close off the game thread.
+- Uses the latest analog sample per frame without losing digital button edges;
+  adds menu-stick hysteresis and controlled repeats.
+- Extends the Windows report with update intervals, composition resolution,
+  Windows scale, and current stick/button state.
+- Adds a controller- and touch/click-accessible GitHub project link and a discreet
+  Scott Cawthon attribution in Settings on both Android and Windows.
+- Android keeps its package/signing identity and existing gameplay/rendering.
+- OXP3 hardware verification remains pending; Intel-specific fault is not established.
+
 # 0.2.3 Windows preview — 2026-10-06
 
 - Responds to continuing OXP3 slowdown with a default Handheld rendering mode:

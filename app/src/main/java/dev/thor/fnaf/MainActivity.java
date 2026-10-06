@@ -59,6 +59,10 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
     final NightSkipChord nightSkip=new NightSkipChord();
     final NightSkipChord jumpscareChord=new NightSkipChord(7);
 
+    void openProjectPage(){
+        try{startActivity(new Intent(Intent.ACTION_VIEW,android.net.Uri.parse("https://github.com/MjonirMade/fnaf-redone")));}
+        catch(android.content.ActivityNotFoundException e){new android.app.AlertDialog.Builder(this).setMessage("No browser is installed. Visit github.com/MjonirMade/fnaf-redone.").setPositiveButton("OK",null).show();}
+    }
     @Override public void onCreate(Bundle saved) {
         super.onCreate(saved);
         prefs = getSharedPreferences("thor", MODE_PRIVATE);
@@ -186,11 +190,11 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
                 (journal==1?progress.cleared(i):progress.earned(i))?names[i]+"  *":names[i];
             rows[names.length]="Back";return rows;
         }
-        if(options)return new String[]{"Screen mode: "+ScreenMode.LABELS[screenMode],"Shift dashboard","Look sensitivity: "+SENSITIVITIES[sensitivity],"Swap screens","Second display","Controller check","Remap buttons","Controls","Import Steam file","Import local font","Back"};
+        if(options)return new String[]{"Screen mode: "+ScreenMode.LABELS[screenMode],"Shift dashboard","Look sensitivity: "+SENSITIVITIES[sensitivity],"Swap screens","Second display","Controller check","Remap buttons","Controls","Import Steam file","Import local font","GitHub project","Back"};
         if(state.running)return new String[]{"Resume","Office Shop","Options","Quit to title"};
         return new String[]{state.night==1?"New Game":"Continue","Night "+state.night+(state.night==7?" / Custom":""),"Challenges","Achievements","Office Shop","Options","Exit"};
     }
-    int[] menuActions(){return dashboard?new int[]{0,14,13,15,18}:options?new int[]{17,18,10,2,3,4,5,6,7,16,11}:state.running?new int[]{0,15,12,8}:new int[]{0,1,13,14,15,12,9};}
+    int[] menuActions(){return dashboard?new int[]{0,14,13,15,18}:options?new int[]{17,18,10,2,3,4,5,6,7,16,21,11}:state.running?new int[]{0,15,12,8}:new int[]{0,1,13,14,15,12,9};}
     void startNight(){if(!assets.ready||assets.importing){showHelp=true;return;}savedWin=false;runPoints=0;releaseInputs();pendingCustom=state.custom.clone();
         intro.begin(state.night==1&&activeChallenge<0);audio.stopAll();audio.pause(false);
         if(intro.stage==2)audio.menuBlip();assets.warm();}
@@ -243,6 +247,7 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
             case 17:
                 screenMode=(screenMode+1)%ScreenMode.LABELS.length;
                 prefs.edit().putInt("screen_mode",screenMode).apply();releaseInputs();connectDisplay();break;
+            case 21:openProjectPage();break;
             case 18:
                 if(dashboard){dashboard=false;options=true;selected=1;}
                 else{dashboard=true;options=false;selected=0;}

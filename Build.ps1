@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory=$true)][string]$Toolchain,
     [Parameter(Mandatory=$true)][string]$SigningKey,
     [string]$KeyAlias='thor',
-    [string]$OutputApk=(Join-Path $PSScriptRoot '../FNaF-Redone-0.1.2-preview.apk')
+    [string]$OutputApk=(Join-Path $PSScriptRoot '../FNaF-Redone-0.1.3-preview.apk')
 )
 $ErrorActionPreference='Stop'
 $Toolchain=(Resolve-Path $Toolchain).Path
@@ -34,7 +34,7 @@ Check 'Screen mode test compilation'
 Check 'Screen mode tests'
 & $aapt compile --dir (Join-Path $source 'res') -o (Join-Path $out 'res.zip')
 Check 'Resource compilation'
-& $aapt link -I $androidJar --manifest (Join-Path $source 'AndroidManifest.xml') -A (Join-Path $source 'assets') -0 ttf --min-sdk-version 26 --target-sdk-version 35 --version-code 3 --version-name '0.1.2-preview' -o (Join-Path $out 'unsigned.apk') (Join-Path $out 'res.zip')
+& $aapt link -I $androidJar --manifest (Join-Path $source 'AndroidManifest.xml') -A (Join-Path $source 'assets') -0 ttf --min-sdk-version 26 --target-sdk-version 35 --version-code 4 --version-name '0.1.3-preview' -o (Join-Path $out 'unsigned.apk') (Join-Path $out 'res.zip')
 Check 'Resource linking'
 $files=Get-ChildItem (Join-Path $source 'java') -Recurse -Filter '*.java' | ForEach-Object FullName
 & (Join-Path $jdk 'javac.exe') --release 8 -cp $androidJar -d (Join-Path $out 'classes') @files

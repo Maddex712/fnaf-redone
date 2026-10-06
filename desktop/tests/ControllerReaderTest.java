@@ -26,6 +26,10 @@ public final class ControllerReaderTest {
         if(!app.state.leftDoor||ordered.buttons!=0)throw new AssertionError("Lost or reordered short button transition");
         ordered.packets.offer(down);ordered.suspend();ordered.resume();SwingUtilities.invokeAndWait(ordered::poll);
         if(!app.state.leftDoor||!ordered.packets.isEmpty())throw new AssertionError("Replayed unfocused input");
+        byte[] stale=new byte[17],latest=new byte[17];stale[9]=100; // old positive stick
+        latest[9]=(byte)156; // newest negative stick
+        ordered.packets.offer(stale);ordered.packets.offer(latest);SwingUtilities.invokeAndWait(ordered::poll);
+        if(app.state.axis>=-.5f)throw new AssertionError("Stale analog motion replayed");
         ordered.close();app.assets.close();java.nio.file.Files.delete(temp);
         System.out.println("Controller reader: nonblocking delivery, ordered edges, focus clearing and shutdown passed");System.exit(0);
     }

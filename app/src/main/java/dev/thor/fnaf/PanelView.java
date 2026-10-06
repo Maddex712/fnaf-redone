@@ -409,7 +409,8 @@ final class PanelView extends View {
         }else{
             String[] labels=app.menuItems();float yy=app.options?115:290;float spacing=app.options?Math.min(51,480f/labels.length):43;
             for(int i=0;i<labels.length;i++)menuItem(labels[i],40,yy+i*spacing,650,spacing,100+i,app.selected==i);
-            if(!app.assets.ready)text("Select New Game to import your Steam copy",45,620,17,WHITE);
+            if(app.options)text("Five Nights at Freddy's and its characters belong to Scott Cawthon. Unofficial fan project.",45,646,12,0xff888888);
+            if(!app.assets.ready&&!app.options)text("Select New Game to import your Steam copy",45,620,17,WHITE);
             if(app.assets.importing){rect(0,105,1000,545,0xf0000000);text(app.assets.status,45,340,24,WHITE);}
 
         }
