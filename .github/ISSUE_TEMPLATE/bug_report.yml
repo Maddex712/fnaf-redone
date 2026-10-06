@@ -15,8 +15,8 @@ body:
   - type: input
     id: device
     attributes:
-      label: Device and Android version
-      placeholder: Handheld model, Android version, controller if external
+      label: Device and operating system
+      placeholder: Handheld model, Android or Windows version, controller mode
     validations:
       required: true
   - type: dropdown

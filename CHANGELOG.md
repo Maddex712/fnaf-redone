@@ -1,3 +1,12 @@
+# 0.2.0 Windows preview — 2026-10-06
+
+- Adds a portable Windows x64 client with a bundled Java runtime.
+- Shares gameplay, menus, progression, asset import, and visual-effect code with Android.
+- Adds XInput controls, keyboard/mouse input, Windows file selection, fullscreen toggle,
+  local Windows saves, and optional second-monitor support.
+- Handles controller disconnection, focus loss, audio pause/resume, and HiDPI hit boxes.
+- Android remains on the unchanged 0.1.2 preview. Physical OXP3 verification is pending.
+
 # 0.1.2 preview — 2026-10-06
 
 - Renames the project and Android launcher label to **FNaF Redone**.

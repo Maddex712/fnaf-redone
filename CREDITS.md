@@ -21,3 +21,7 @@
 - Consolas: Microsoft; not redistributed. Players may import a locally supplied font.
 
 The MIT code license does not cover third-party art, game data, names or trademarks.
+
+Windows-specific dependencies and bundled runtime notices are listed in
+[`desktop/THIRD-PARTY.md`](desktop/THIRD-PARTY.md). The platform adapter, like the
+rest of this project, was developed with OpenAI Codex assistance.

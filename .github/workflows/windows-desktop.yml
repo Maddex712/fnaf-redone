@@ -1,0 +1,27 @@
+name: Windows desktop build
+on:
+  push:
+    branches: [main]
+    paths: ['desktop/**', 'app/src/main/**', '.github/workflows/windows-desktop.yml']
+  pull_request:
+    paths: ['desktop/**', 'app/src/main/**', '.github/workflows/windows-desktop.yml']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Shared tests
+        shell: pwsh
+        run: ./Test.ps1
+      - name: Compile and package Windows client
+        shell: pwsh
+        run: ./desktop/Build-Windows.ps1 -Package

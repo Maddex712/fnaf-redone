@@ -2,16 +2,17 @@
 
 <img src="docs/images/banner.svg" alt="FNaF Redone" width="100%" />
 
-**Five Nights at Freddy’s 1, with more ways to play on Android.**
+**An enhanced Five Nights at Freddy’s 1 port for Android handhelds.**
 
-Built for Android handhelds. Play on one screen or two. Bring your own Steam copy.
+Single- and dual-screen support. Bring your own Steam copy. Windows x64 client also available.
 
 [![Preview](https://img.shields.io/badge/release-0.1.2_preview-d8bc7e?style=flat-square)](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.2-preview)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-9bbe91?style=flat-square)](docs/COMPATIBILITY.md)
+[![Windows](https://img.shields.io/badge/Windows-x64_preview-a5a9b2?style=flat-square)](desktop/README.md)
 [![Tests](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml)
 [![Code license](https://img.shields.io/badge/code-MIT-a5a9b2?style=flat-square)](LICENSE)
 
-### [Download APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.2-preview/FNaF-Redone-0.1.2-preview.apk) · [Setup guide](docs/INSTALL.md) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
+### [Android APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.2-preview/FNaF-Redone-0.1.2-preview.apk) · [Windows ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.0-windows-preview) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
 
 </div>
 
@@ -24,9 +25,10 @@ FNaF Redone pairs the familiar doors, lights, power management, and camera survi
 loop with native controller support, a companion terminal, and unlockable office
 cosmetics. On a single-screen device, the office and cameras fill the same display.
 
-This is a standalone fan-made Android runtime that imports assets from your own
+This fan-made Android port uses a standalone runtime that imports assets from your own
 Steam installation. It runs locally and offline; it does not stream your PC or run
-the Windows executable.
+the original Windows game executable. The Windows client shares the Android
+gameplay and menus, with native desktop rendering, audio, and controller input.
 
 > **Preview release:** the gameplay is intended to preserve FNaF 1’s rules and
 > difficulty. Cosmetics provide no gameplay advantages. This is a reconstructed
@@ -55,6 +57,12 @@ Single-screen users can open the same information from **Options → Shift dashb
 </details>
 
 ## Get playing
+
+**On Windows?** Download the portable x64 ZIP, extract the whole folder, and run
+**FNaF Redone.exe**. Then select your Steam EXE inside the client.
+No separate Java installation is needed. [Windows setup and controls](desktop/README.md).
+
+**On Android:**
 
 **You need Android 8.0+, 1.5 GB free during setup, and your purchased Windows Steam
 copy of FNaF 1.** Supports single- and dual-screen Android handhelds; see the
@@ -108,6 +116,7 @@ Windows font files are not included.
 | Looking for… | Start here |
 | --- | --- |
 | Installation, imports, saves, troubleshooting | [Setup guide](docs/INSTALL.md) |
+| Windows handhelds, portable EXE, keyboard controls | [Windows guide](desktop/README.md) |
 | Supported devices and game versions | [Compatibility](docs/COMPATIBILITY.md) |
 | Building an APK or running tests | [Build guide](docs/BUILD.md) |
 | What changed | [Changelog](CHANGELOG.md) |

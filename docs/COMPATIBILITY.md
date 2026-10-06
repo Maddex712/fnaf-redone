@@ -9,9 +9,10 @@
 | BlueStacks | Steam EXE import completed successfully in a manual check. |
 | Other Android phones/tablets | Single-screen support included; physical-device testing still needed. |
 | Other dual-screen Android devices | Requires Android presentation-display support; not certified. |
-| iOS / Windows desktop | No application build provided. Windows is used only to obtain your Steam file and build source. |
+| Windows 10/11 x64 | Portable desktop preview available; see the [Windows guide](../desktop/README.md). OXP3 physical hardware validation is pending. |
+| iOS | No application build provided. |
 
-Android **8.0 / API 26** is the minimum. Allow at least **1.5 GB free** during
+For the Android build, **8.0 / API 26** is the minimum. Allow at least **1.5 GB free** during
 import. The app targets Android API 35. A controller is recommended, with touch
 controls also available. Artwork is fitted to a 16:9 viewport rather than stretched.
 

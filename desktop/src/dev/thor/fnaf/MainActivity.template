@@ -1,0 +1,115 @@
+package dev.thor.fnaf;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
+import android.view.Display;
+import android.view.InputDevice;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import java.util.ArrayList;
+import java.util.Locale;
+import javax.swing.*;
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice;
+import java.awt.Rectangle;
+
+/** Windows host for the shared Android client. Generated shared blocks are not forks. */
+public final class MainActivity extends Context {
+/* SHARED_FIELDS */
+    JFrame window;
+    DesktopController controller;
+    boolean fullscreen,closed;
+    final java.util.Set<Integer> keyboard=new java.util.HashSet<>();
+    javax.swing.Timer controllerTimer;
+    java.nio.channels.FileLock instanceLock;
+    java.nio.channels.FileChannel lockChannel;
+    long lastDisplayCheck;
+    String monitorSignature="";
+    public static void main(String[] args){
+        Thread.setDefaultUncaughtExceptionHandler((thread,error)->{
+            error.printStackTrace();
+            SwingUtilities.invokeLater(()->JOptionPane.showMessageDialog(null,"FNaF Redone encountered an error.\n"+error,"FNaF Redone",JOptionPane.ERROR_MESSAGE));
+        });
+        SwingUtilities.invokeLater(()->{try{UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}catch(Exception ignored){}new MainActivity().start();});
+    }
+    void start(){
+        try{
+            lockChannel=java.nio.channels.FileChannel.open(new java.io.File(getFilesDir(),"running.lock").toPath(),java.nio.file.StandardOpenOption.CREATE,java.nio.file.StandardOpenOption.WRITE);
+            instanceLock=lockChannel.tryLock();
+            if(instanceLock==null){JOptionPane.showMessageDialog(null,"FNaF Redone is already running.");lockChannel.close();return;}
+        }catch(Exception e){JOptionPane.showMessageDialog(null,"Cannot open local save directory: "+e.getMessage());return;}
+        prefs=new SharedPreferences(getFilesDir());
+        progress=new Progress(prefs.getString("progress_v1",null));
+        screenMode=ScreenMode.valid(prefs.getInt("screen_mode",ScreenMode.SINGLE));
+        sensitivity=Math.max(0,Math.min(3,prefs.getInt("sensitivity",2)));state.lookSpeed=LOOK_SPEEDS[sensitivity];
+        swapped=prefs.getBoolean("swapped",false);unlocked=Math.max(1,Math.min(7,prefs.getInt("unlocked",1)));state.night=Math.min(6,unlocked);
+        for(int i=0;i<keys.length;i++)keys[i]=prefs.getInt("key"+i,keys[i]);
+        assets=new GameAssets(this);audio=new GameAudio(assets);assets.warm();
+        primary=new PanelView(this,this,true);window=new JFrame("FNaF Redone");
+        window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);window.setContentPane(primary);
+        primary.setPreferredSize(new java.awt.Dimension(1280,720));window.pack();window.setLocationRelativeTo(null);
+        window.addWindowListener(new java.awt.event.WindowAdapter(){public void windowClosing(java.awt.event.WindowEvent e){finish();}});
+        java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e->{
+            if(!focused())return false;
+            boolean down=e.getID()==java.awt.event.KeyEvent.KEY_PRESSED;
+            if(e.getID()!=java.awt.event.KeyEvent.KEY_PRESSED&&e.getID()!=java.awt.event.KeyEvent.KEY_RELEASED)return false;
+            if(e.getKeyCode()==java.awt.event.KeyEvent.VK_F11){if(down&&!keyboard.contains(e.getKeyCode()))toggleFullscreen();if(down)keyboard.add(e.getKeyCode());else keyboard.remove(e.getKeyCode());return true;}
+            int code=DesktopController.keyboardCode(e.getKeyCode());if(code<0)return false;
+            int repeat=down&&!keyboard.add(e.getKeyCode())?1:0;if(!down)keyboard.remove(e.getKeyCode());
+            return handleKey(new KeyEvent(code,down,repeat));
+        });
+        window.setVisible(true);primary.requestFocusInWindow();
+        if(prefs.getBoolean("fullscreen",true))toggleFullscreen();
+        resumed=true;connectDisplay();lastFrame=SystemClock.elapsedRealtimeNanos();handler.post(frame);
+        controller=new DesktopController(this);
+        controllerTimer=new javax.swing.Timer(8,e->{
+            if(closed)return;
+            if(focused())controller.poll();else if(!keyboard.isEmpty()||controller.held())loseFocus();
+            long now=SystemClock.uptimeMillis();
+            if(now-lastDisplayCheck>1500){lastDisplayCheck=now;String current=displaySignature();if(!current.equals(monitorSignature)){monitorSignature=current;connectDisplay();}}
+        });controllerTimer.start();
+        window.addWindowFocusListener(new java.awt.event.WindowAdapter(){public void windowLostFocus(java.awt.event.WindowEvent e){SwingUtilities.invokeLater(()->{if(!focused())loseFocus();});}});
+    }
+    boolean focused(){return window!=null&&(window.isFocused()||(presentation!=null&&presentation.window.isFocused()));}
+    void loseFocus(){keyboard.clear();releaseInputs();if(controller!=null)controller.reset();primary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(secondary!=null)secondary.onTouchEvent(new MotionEvent(MotionEvent.ACTION_CANCEL,0,0));if(state.active()&&!outro.active())state.pause();audio.pause(true);}
+    void toggleFullscreen(){fullscreen=!fullscreen;window.dispose();window.setUndecorated(fullscreen);if(fullscreen){Rectangle b=window.getGraphicsConfiguration().getBounds();window.setBounds(b);}else{window.setSize(1280,760);window.setLocationRelativeTo(null);}window.setVisible(true);primary.requestFocusInWindow();prefs.edit().putBoolean("fullscreen",fullscreen).apply();}
+    String displaySignature(){StringBuilder b=new StringBuilder();for(GraphicsDevice d:GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices())b.append(d.getIDstring()).append(d.getDefaultConfiguration().getBounds());return b.toString();}
+    ArrayList<Display> candidates(){ArrayList<Display> choices=new ArrayList<>();GraphicsDevice current=window.getGraphicsConfiguration().getDevice();GraphicsDevice[] all=GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();for(int i=0;i<all.length;i++)if(!all[i].equals(current))choices.add(new Display(all[i],i));return choices;}
+    void dismissDisplay(){if(presentation!=null)presentation.window.dispose();presentation=null;secondary=null;}
+    void connectDisplay(){
+        ArrayList<Display> choices=candidates();
+        if(!ScreenMode.useSecondDisplay(screenMode,!choices.isEmpty())){boolean had=presentation!=null;dismissDisplay();if(had){releaseInputs();state.pause();}displayStatus="Single screen • F11 toggles fullscreen";return;}
+        Display target=choices.get(0);for(Display d:choices)if(d.getDisplayId()==selectedDisplay)target=d;
+        if(presentation!=null&&presentation.display.device.equals(target.device))return;
+        dismissDisplay();selectedDisplay=target.getDisplayId();secondary=new PanelView(this,this,false);presentation=new DesktopPresentation(target,secondary);displayStatus="Dual screen • "+target.getName();
+    }
+    static final class DesktopPresentation {final Display display;final JFrame window;DesktopPresentation(Display d,PanelView panel){display=d;window=new JFrame("FNaF Redone — Monitor",d.device.getDefaultConfiguration());window.setUndecorated(true);window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);window.setContentPane(panel);window.setBounds(d.device.getDefaultConfiguration().getBounds());window.setVisible(true);}}
+    void finish(){
+        if(assets.importing){JOptionPane.showMessageDialog(window,"Please let the current import finish before closing.");return;}
+        closed=true;resumed=false;saveProgress();handler.removeCallbacksAndMessages(null);if(controllerTimer!=null)controllerTimer.stop();audio.stopAll();assets.close();dismissDisplay();window.dispose();
+        try{if(instanceLock!=null)instanceLock.release();if(lockChannel!=null)lockChannel.close();}catch(Exception ignored){}
+        System.exit(0);
+    }
+    void chooseLocalFile(int request){
+        if(assets.importing)return;state.pause();releaseInputs();
+        JFileChooser chooser=new JFileChooser();chooser.setDialogTitle(request==10?"Select your Steam FNaF 1 executable":"Select a local menu font");
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(request==10?"FNaF 1 executable or asset pack":"TrueType font",request==10?new String[]{"exe","zip"}:new String[]{"ttf"}));
+        String programFiles=System.getenv("ProgramFiles(x86)");
+        if(request==10&&programFiles!=null){java.io.File steam=new java.io.File(programFiles,"Steam/steamapps/common/Five Nights at Freddy's");if(steam.isDirectory())chooser.setCurrentDirectory(steam);}
+        if(chooser.showOpenDialog(window)!=JFileChooser.APPROVE_OPTION)return;
+        java.io.File file=chooser.getSelectedFile();
+        if(request==10){audio.stopAll();state.running=false;state.paused=false;showHelp=false;assets.importPack(new android.net.Uri(file),()->SwingUtilities.invokeLater(()->{assets.warm();JOptionPane.showMessageDialog(window,assets.status,assets.ready?"Ready to play":"Import failed",assets.ready?JOptionPane.INFORMATION_MESSAGE:JOptionPane.ERROR_MESSAGE);}));}
+        else{
+            java.io.File staged=new java.io.File(getFilesDir(),"font-import.tmp");
+            try{if(file.length()>4*1024*1024)throw new java.io.IOException("Font must be smaller than 4 MB");java.nio.file.Files.copy(file.toPath(),staged.toPath(),java.nio.file.StandardCopyOption.REPLACE_EXISTING);android.graphics.Typeface face=android.graphics.Typeface.createFromFile(staged);java.nio.file.Files.move(staged.toPath(),new java.io.File(getFilesDir(),"menu-font.ttf").toPath(),java.nio.file.StandardCopyOption.REPLACE_EXISTING);PanelView.menuFont=face;primary.p.setTypeface(face);if(secondary!=null)secondary.p.setTypeface(face);JOptionPane.showMessageDialog(window,"Menu font imported.");}catch(Exception e){JOptionPane.showMessageDialog(window,"Font import failed: "+e.getMessage());}finally{staged.delete();}
+        }
+    }
+    String diagnostics(){return displayStatus+"\n"+(controller==null?"Controller initializing":controller.status)+"\n"+assets.status+"\n"+audio.lastError;}
+/* SHARED_FRAME */
+/* SHARED_LOGIC */
+/* SHARED_INPUT */
+/* SHARED_ENDING */
+}

@@ -1,0 +1,2 @@
+package android.graphics;
+public class Matrix {final java.awt.geom.AffineTransform value;public Matrix(java.awt.geom.AffineTransform v){value=new java.awt.geom.AffineTransform(v);}public void mapRect(RectF r){java.awt.geom.Rectangle2D b=value.createTransformedShape(new java.awt.geom.Rectangle2D.Float(r.left,r.top,r.width(),r.height())).getBounds2D();r.left=(float)b.getMinX();r.top=(float)b.getMinY();r.right=(float)b.getMaxX();r.bottom=(float)b.getMaxY();}}
