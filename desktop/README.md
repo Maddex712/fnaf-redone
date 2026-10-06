@@ -1,14 +1,14 @@
 # FNaF Redone for Windows
 
-A portable **Windows x64** client for handhelds such as the OXP3 and for desktop PCs.
+A **Windows x64** client for handhelds such as the OXP3 and for desktop PCs.
 This is the same gameplay and menu code used by the Android port, hosted by a
 Windows Java2D/audio/input adapter. It does not run Android or emulate the APK.
 
 ## Play
 
-1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.5-windows-preview).
-2. Extract the **entire** ZIP into a folder. Keep `app` and `runtime` beside the EXE.
-3. Run **FNaF Redone.exe**. No separate Java installation is needed.
+1. Download [**freddyfiles.exe**](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.2.5-windows-preview/freddyfiles.exe).
+2. Run FreddyFiles and select **Install**. It installs for your Windows account without administrator access.
+3. Open **FNaF Redone** from its Start menu or desktop shortcut. No separate Java installation is needed.
 4. Choose **New Game → Scan Steam** (A / Enter). The client finds your installed
    FNaF 1 copy and imports it. Use **Browse File** (X / Space) to select an EXE or
    existing data ZIP yourself.
@@ -18,6 +18,25 @@ You need Windows 10/11 **64-bit**, your purchased Windows Steam FNaF 1 copy, and
 at least **1.5 GB free** for import. The supported game file is the same as the
 [Android build](../docs/COMPATIBILITY.md#supported-game-file). This preview is not
 code-signed. Verify its SHA-256 against the release checksum file.
+
+FreddyFiles defaults to `%LOCALAPPDATA%\Programs\FNaF Redone`. Add that folder's
+**FNaF Redone.exe** to WinHanced once. If you already have a portable copy in
+WinHanced, select **its existing folder** in the installer to preserve that entry.
+Close the game first. A replaced installation is retained beside it in a
+`.before-install-...` recovery folder; FreddyFiles shows its location afterward.
+The installer refuses to replace a newer game version or an unrelated folder.
+It uses Windows' .NET Framework 4.8, included with current Windows 10/11 installations.
+
+Prefer no installer? The [portable ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.5-windows-preview)
+is still available. Extract the entire folder, keeping `app` and `runtime` beside
+the EXE. The in-game updater uses this ZIP for both installation types.
+
+To uninstall, use **Windows Settings → Apps → FNaF Redone → Uninstall** or the
+Start menu uninstall shortcut. Saves and imported Steam files are kept in
+`%LOCALAPPDATA%\FNaFRedone`. The small `<game-folder>.freddyfiles` maintenance
+folder can be deleted after uninstall finishes; recovery copies are also kept
+until you choose to remove them. Maintenance lives outside the application folder
+so it continues working after the game's in-place updates.
 
 The scan checks Steam's registered installation, standard locations, and additional
 libraries listed in `libraryfolders.vdf`, including libraries on other drives.
@@ -89,8 +108,9 @@ The EXE path stays the same, so your WinHanced entry or shortcut needs no change
 The app restarts after replacement. Your saved progress, settings, and imported
 Steam data remain in `%LOCALAPPDATA%\FNaFRedone`. Updating ends the current night.
 
-**One-time setup from 0.2.4 or earlier:** close the game and extract this release's
-`FNaF Redone` folder contents into your existing app folder, accepting replacement.
+**One-time setup from 0.2.4 or earlier:** close the game and run FreddyFiles, choosing
+your existing app folder. Alternatively, extract this release's `FNaF Redone` folder
+contents into your existing app folder, accepting replacement.
 Keep its location and `FNaF Redone.exe` filename unchanged. Future updates can be
 installed from Options. Do not make a new version-named launcher entry.
 
@@ -134,6 +154,21 @@ JNA 5.14.0 and JSON-java 20240303. It generates the shared client classes, compi
 the Windows adapter, and uses `jpackage` to include a reduced Java runtime.
 Output: `desktop/build/dist/FNaF Redone/FNaF Redone.exe`.
 Use `-OutputDirectory PATH` for a fresh packaging destination on subsequent builds.
+
+Build the single-file installer with the Windows .NET Framework compiler (no
+additional packaging tool required):
+
+```powershell
+./desktop/Build-Installer.ps1
+./desktop/Test-Installer.ps1
+```
+
+Output: `desktop/build/installer/freddyfiles.exe` and `FreddyFiles-SHA256SUMS.txt`.
+Use `-PayloadZip PATH` to embed an already-published portable ZIP unchanged.
+Installer tests use isolated folders, shortcuts, and a temporary uninstall registry
+key. They cover installation, locked files, rollback, downgrade refusal, the real
+updater's folder swap, stable shortcuts, and uninstall after update. They retain
+their test fixtures under the ignored build directory for inspection.
 
 `generate.py` reads the Android source at build time. Simulation, progression,
 rendering, assets, animation logic, and audio routing are reused. The host replaces

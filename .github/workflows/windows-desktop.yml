@@ -34,3 +34,9 @@ jobs:
       - name: Packaged EXE update and restart
         shell: pwsh
         run: ./desktop/Test-PackagedUpdater.ps1
+      - name: Build FreddyFiles installer
+        shell: pwsh
+        run: ./desktop/Build-Installer.ps1
+      - name: Installer, update, and uninstall round trip
+        shell: pwsh
+        run: ./desktop/Test-Installer.ps1

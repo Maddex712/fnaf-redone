@@ -1,5 +1,8 @@
 # 0.2.5 Windows preview — 2026-10-06
 
+- Adds **freddyfiles.exe**, a per-user installer with Start menu and optional desktop
+  shortcuts, a stable game path, and an uninstaller that survives in-game updates.
+  The portable ZIP remains available; the game payload is unchanged.
 - Adds **Check for updates → Install and restart**. Downloads the Windows release,
   verifies GitHub's SHA-256 digest and archive structure, and stages the full app.
 - Replaces the application at its existing path after shutdown and relaunches the

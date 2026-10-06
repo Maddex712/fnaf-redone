@@ -12,7 +12,7 @@ Single- and dual-screen support. Bring your own Steam copy. Windows x64 client a
 [![Tests](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml)
 [![Code license](https://img.shields.io/badge/code-MIT-a5a9b2?style=flat-square)](LICENSE)
 
-### [Android APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.3-preview/FNaF-Redone-0.1.3-preview.apk) · [Windows ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.5-windows-preview) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
+### [Android APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.3-preview/FNaF-Redone-0.1.3-preview.apk) · [Windows installer](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.2.5-windows-preview/freddyfiles.exe) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
 
 </div>
 
@@ -58,10 +58,12 @@ Single-screen users can open the same information from **Options → Shift dashb
 
 ## Get playing
 
-**On Windows?** Download the portable x64 ZIP, extract the whole folder, and run
-**FNaF Redone.exe**. Choose **New Game → Scan Steam** to find and import your
+**On Windows?** Download **freddyfiles.exe**, run it, and select **Install**.
+Open **FNaF Redone** from its shortcut. Choose **New Game → Scan Steam** to find and import your
 installed FNaF 1 copy automatically, or **Browse File** to select it yourself.
-No separate Java installation is needed. [Windows setup and controls](desktop/README.md).
+No separate Java installation is needed. Already using WinHanced? Select your existing
+game folder during installation to keep its EXE path. The portable ZIP remains available.
+[Windows setup and controls](desktop/README.md).
 
 **On Android:**
 
