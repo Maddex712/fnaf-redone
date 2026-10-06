@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/images/banner.svg" alt="FNaF Redone — Your shift. Your screen." width="100%" />
+<img src="docs/images/banner.svg" alt="FNaF Redone" width="100%" />
 
 **Five Nights at Freddy’s 1, with more ways to play on Android.**
 
@@ -64,7 +64,7 @@ copy of FNaF 1.** Supports single- and dual-screen Android handhelds; see the
 2. On your PC, open Steam → FNaF 1 → Manage → **Browse local files**.
 3. Copy **FiveNightsatFreddys.exe** to your Android device’s Downloads folder.
 4. Open the app → **New Game → Select Steam File**, and choose that file.
-5. Wait for **Ready to play**. Your shift starts here.
+5. Wait for **Ready to play**, then start the game.
 
 **No Steam sign-in or separate extractor needed.** The app extracts your game’s
 images and sounds on the device. Only the verified Steam build is currently
