@@ -1,0 +1,47 @@
+name: Bug report
+description: Report a reproducible problem with FNaF Thor.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: Please do not attach game executables, extracted assets, credentials, or private logs.
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      placeholder: 0.1.1-preview
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: AYN Thor, Android version, controller if external
+    validations:
+      required: true
+  - type: dropdown
+    id: screen
+    attributes:
+      label: Screen mode
+      options:
+        - Auto
+        - Single screen
+        - Dual screen
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include the night, camera, or menu involved.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots, clips, or error text
+      description: Remove personal details before attaching anything.
