@@ -8,7 +8,7 @@ Built for AYN Thor. Play on one screen or two. Bring your own Steam copy.
 
 [![Preview](https://img.shields.io/badge/release-0.1.1_preview-d8bc7e?style=flat-square)](https://github.com/MjonirMade/fnaf-thor/releases/tag/v0.1.1-preview)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-9bbe91?style=flat-square)](docs/COMPATIBILITY.md)
-[![Tests](https://github.com/MjonirMade/fnaf-thor/actions/workflows/tests.yml/badge.svg)](https://github.com/MjonirMade/fnaf-thor/actions/workflows/tests.yml)
+[![Tests](https://github.com/MjonirMade/fnaf-thor/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/MjonirMade/fnaf-thor/actions/workflows/tests.yml)
 [![Code license](https://img.shields.io/badge/code-MIT-a5a9b2?style=flat-square)](LICENSE)
 
 ### [Download APK](https://github.com/MjonirMade/fnaf-thor/releases/download/v0.1.1-preview/FNaF-Thor-0.1.1-preview.apk) · [Setup guide](docs/INSTALL.md) · [Report a bug](https://github.com/MjonirMade/fnaf-thor/issues/new?template=bug_report.yml)
