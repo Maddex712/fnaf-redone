@@ -24,7 +24,8 @@ public final class PackagedUpdaterTest {
    long until=System.nanoTime()+15_000_000_000L;Path marker=temp.resolve("restarted.txt");while(!Files.exists(marker)&&System.nanoTime()<until)Thread.sleep(50);
    if(!Files.exists(marker))throw new AssertionError("EXE did not restart: "+Files.readString(work.resolve("helper.log")));
    String result=Files.readString(marker);
-   if(!result.startsWith(ReleaseConfig.VERSION+"\n")||!result.toLowerCase().contains(install.resolve("FNaF Redone.exe").toString().toLowerCase()))throw new AssertionError("Wrong version/path: "+result);
+   String[] lines=result.split("\\R");
+   if(lines.length<3||!lines[0].equals(ReleaseConfig.VERSION)||!Files.isSameFile(Path.of(lines[1]),install.resolve("FNaF Redone.exe")))throw new AssertionError("Wrong version/path: "+result);
    if(!Files.readString(data.resolve("save.txt")).equals("keep me"))throw new AssertionError("Save altered");
    // The marker is written just before the new native EXE exits; allow DLL handles to close.
    long relaunched=Long.parseLong(result.substring(result.lastIndexOf("\n")+1));
