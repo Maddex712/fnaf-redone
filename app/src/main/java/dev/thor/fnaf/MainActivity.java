@@ -63,8 +63,12 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
         try{startActivity(new Intent(Intent.ACTION_VIEW,android.net.Uri.parse("https://github.com/MjonirMade/fnaf-redone")));}
         catch(android.content.ActivityNotFoundException e){new android.app.AlertDialog.Builder(this).setMessage("No browser is installed. Visit github.com/MjonirMade/fnaf-redone.").setPositiveButton("OK",null).show();}
     }
+    AndroidUpdater updater;
+    void checkForUpdates(){updater.check();}
+    String versionLabel(){return "FNaF Redone "+updater.version();}
     @Override public void onCreate(Bundle saved) {
         super.onCreate(saved);
+        updater=new AndroidUpdater(this);
         prefs = getSharedPreferences("thor", MODE_PRIVATE);
         screenMode=ScreenMode.valid(prefs.getInt("screen_mode",ScreenMode.AUTO));
         progress=new Progress(prefs.getString("progress_v1",null));
@@ -98,6 +102,7 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
         resumed = false; handler.removeCallbacks(frame); state.pause(); audio.pause(true); releaseInputs(); dismissDisplay(); super.onPause();
     }
     @Override protected void onDestroy() {
+        updater.close();
         handler.removeCallbacksAndMessages(null); displays.unregisterDisplayListener(this);
         ((InputManager)getSystemService(INPUT_SERVICE)).unregisterInputDeviceListener(this);
         dismissDisplay(); audio.stopAll();assets.close();super.onDestroy();
@@ -190,11 +195,11 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
                 (journal==1?progress.cleared(i):progress.earned(i))?names[i]+"  *":names[i];
             rows[names.length]="Back";return rows;
         }
-        if(options)return new String[]{"Screen mode: "+ScreenMode.LABELS[screenMode],"Shift dashboard","Look sensitivity: "+SENSITIVITIES[sensitivity],"Swap screens","Second display","Controller check","Remap buttons","Controls","Import Steam file","Import local font","GitHub project","Back"};
+        if(options)return new String[]{"Screen mode: "+ScreenMode.LABELS[screenMode],"Shift dashboard","Look sensitivity: "+SENSITIVITIES[sensitivity],"Swap screens","Second display","Controller check","Remap buttons","Controls","Import Steam file","Import local font","Check for updates","GitHub project","Back"};
         if(state.running)return new String[]{"Resume","Office Shop","Options","Quit to title"};
         return new String[]{state.night==1?"New Game":"Continue","Night "+state.night+(state.night==7?" / Custom":""),"Challenges","Achievements","Office Shop","Options","Exit"};
     }
-    int[] menuActions(){return dashboard?new int[]{0,14,13,15,18}:options?new int[]{17,18,10,2,3,4,5,6,7,16,21,11}:state.running?new int[]{0,15,12,8}:new int[]{0,1,13,14,15,12,9};}
+    int[] menuActions(){return dashboard?new int[]{0,14,13,15,18}:options?new int[]{17,18,10,2,3,4,5,6,7,16,19,21,11}:state.running?new int[]{0,15,12,8}:new int[]{0,1,13,14,15,12,9};}
     void startNight(){if(!assets.ready||assets.importing){showHelp=true;return;}savedWin=false;runPoints=0;releaseInputs();pendingCustom=state.custom.clone();
         intro.begin(state.night==1&&activeChallenge<0);audio.stopAll();audio.pause(false);
         if(intro.stage==2)audio.menuBlip();assets.warm();}
@@ -248,6 +253,7 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
                 screenMode=(screenMode+1)%ScreenMode.LABELS.length;
                 prefs.edit().putInt("screen_mode",screenMode).apply();releaseInputs();connectDisplay();break;
             case 21:openProjectPage();break;
+            case 19:checkForUpdates();break;
             case 18:
                 if(dashboard){dashboard=false;options=true;selected=1;}
                 else{dashboard=true;options=false;selected=0;}
@@ -318,6 +324,7 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
     }
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
+        if(updater.activityResult(request))return;
         if(result!=RESULT_OK||data==null||data.getData()==null)return;
         if(request==10){
             audio.stopAll();state.running=false;state.paused=false;showHelp=false;

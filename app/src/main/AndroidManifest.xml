@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="dev.thor.fnaf.preview">
     <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="35" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
     <uses-feature android:name="android.hardware.gamepad" android:required="false" />
     <application android:label="FNaF Redone" android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen" android:allowBackup="false" android:supportsRtl="true" android:icon="@drawable/icon">
+        <provider android:name="dev.thor.fnaf.UpdateApkProvider" android:authorities="dev.thor.fnaf.preview.updates" android:exported="false" android:grantUriPermissions="true" />
         <activity android:name="dev.thor.fnaf.MainActivity" android:exported="true" android:screenOrientation="sensorLandscape" android:configChanges="orientation|screenSize|smallestScreenSize|keyboardHidden|keyboard|navigation|density|uiMode" android:resizeableActivity="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

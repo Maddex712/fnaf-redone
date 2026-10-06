@@ -6,13 +6,13 @@
 
 Single- and dual-screen support. Bring your own Steam copy. Windows x64 client also available.
 
-[![Preview](https://img.shields.io/badge/release-0.1.3_preview-d8bc7e?style=flat-square)](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.3-preview)
+[![Preview](https://img.shields.io/badge/release-0.1.4_preview-d8bc7e?style=flat-square)](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.4-preview)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-9bbe91?style=flat-square)](docs/COMPATIBILITY.md)
 [![Windows](https://img.shields.io/badge/Windows-x64_preview-a5a9b2?style=flat-square)](desktop/README.md)
 [![Tests](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml)
 [![Code license](https://img.shields.io/badge/code-MIT-a5a9b2?style=flat-square)](LICENSE)
 
-### [Android APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.3-preview/FNaF-Redone-0.1.3-preview.apk) · [Windows installer](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.2.5-windows-preview/freddyfiles.exe) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
+### [Android APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.4-preview/FNaF-Redone-0.1.4-preview.apk) · [Windows installer](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.2.5-windows-preview/freddyfiles.exe) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
 
 </div>
 
@@ -71,7 +71,7 @@ game folder during installation to keep its EXE path. The portable ZIP remains a
 copy of FNaF 1.** Supports single- and dual-screen Android handhelds; see the
 [compatibility notes](docs/COMPATIBILITY.md) for tested hardware.
 
-1. [Download and install the APK](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.3-preview). It appears as **FNaF Redone**.
+1. [Download and install the APK](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.4-preview). It appears as **FNaF Redone**.
 2. On your PC, open Steam → FNaF 1 → Manage → **Browse local files**.
 3. Copy **FiveNightsatFreddys.exe** to your Android device’s Downloads folder.
 4. Open the app → **New Game → Select Steam File**, and choose that file.
@@ -83,6 +83,10 @@ supported; check the [file hash and requirements](docs/COMPATIBILITY.md) if impo
 fails. The Steam game’s original gameplay assets are not bundled in the download.
 
 The preview installs alongside the earlier private app, with separate saves.
+Android **Options → Check for updates** downloads and verifies new APKs, then
+opens Android's install prompt. Settings shows your installed version. Install
+0.1.4 over an older public preview once to enable this feature; keep the app installed
+to preserve its saves and imported data.
 [Read the setup guide](docs/INSTALL.md) for updates, display settings, fonts, and troubleshooting.
 
 ## One screen or two

@@ -13,7 +13,7 @@ include the original game's gameplay images or audio.
 
 ## First launch
 
-1. Download the APK from [Releases](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.3-preview).
+1. Download the APK from [Releases](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.4-preview).
 2. Install it on Android. It appears as **FNaF Redone**. Allow installation
    from your chosen browser/file manager if Android prompts you.
 3. On your PC, open Steam → Library → Five Nights at Freddy’s → Manage →
@@ -59,7 +59,30 @@ If you already installed **FNaF Thor Preview (0.1.1)**, install FNaF Redone over
 The public preview's package and signing identity are unchanged, so its saves and
 imported data stay in place. Do not uninstall it before updating.
 
-Install future compatible APKs over the preview to retain its local progress.
+From **0.1.4**, use **Options → Check for updates**. The Options screen shows your
+installed version. The check selects Android APK releases, ignoring Windows builds.
+Choose **Download update** to see progress; **Cancel** stops the download. The app
+checks the complete file's SHA-256, package name, version, and signing certificate
+before opening Android's package installer. Missing verification information never
+starts an automatic installation; use **Release notes** to view GitHub instead.
+
+On first use, Android may require **Allow from this source** for FNaF Redone.
+The app opens that permission page and continues when you return. Android still
+asks you to approve the actual installation; the game cannot install silently.
+Installing closes the game and ends any current night. Your app icon, saves,
+settings, achievements, purchases, and imported files remain in place.
+
+If you choose **Later**, cancel Android's installer, or leave the permission page,
+check again and select **Install downloaded update**. A complete verified APK is
+kept for retry without downloading it again, and removed once that version is
+installed. Connection failures, unavailable releases, and GitHub request limits
+leave the current app unchanged. Update checks are manual; no GitHub/Steam login
+is needed, and playing/importing still works offline.
+
+**One-time setup from 0.1.3 or earlier:** install the 0.1.4 APK over your current
+public preview to get the updater. Do not uninstall first.
+
+You can also install future compatible APKs over the preview manually.
 Importing replacement game data does not reset achievements or purchases.
 **Uninstalling or clearing app data deletes local saves and imported assets.**
 There is no cloud save or Steam save synchronization.

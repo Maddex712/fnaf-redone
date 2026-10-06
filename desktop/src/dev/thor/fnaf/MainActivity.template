@@ -194,6 +194,7 @@ public final class MainActivity extends Context {
         int action=JOptionPane.showOptionDialog(window,new JScrollPane(details),"Performance report",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Copy report","Close"},"Close");
         if(action==0)java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new java.awt.datatransfer.StringSelection(report),null);
     }
+    String versionLabel(){return "FNaF Redone "+ReleaseConfig.VERSION;}
     void openProjectPage(){
         try{java.awt.Desktop.getDesktop().browse(java.net.URI.create("https://github.com/MjonirMade/fnaf-redone"));}
         catch(Exception e){JOptionPane.showMessageDialog(window,"Could not open your browser. Visit github.com/MjonirMade/fnaf-redone.");}

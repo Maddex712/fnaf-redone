@@ -18,7 +18,7 @@ for n in ['PanelView','GameAssets','GameAudio','GameState','Progress','NightIntr
   text=text.replace('Touch controls work on both screens.', 'Mouse/touch: click controls. F11: fullscreen.')
   text=text.replace('Native dual-screen build.', 'Windows single-/dual-screen build.')
   text=text.replace('c.save();c.scale(getWidth()/1000f,getHeight()/650f);', 'c.save();float[] viewport=DisplayLayout.fit(getWidth(),getHeight());c.translate(viewport[0],viewport[1]);c.scale(viewport[2]/1000f,viewport[3]/650f);')
-  text=text.replace('if(!app.assets.ready&&!app.options)text("Select New Game', 'if(app.options){text("FNaF Redone "+ReleaseConfig.VERSION,45,608,15,MUTED);text(app.detectedDisplay,45,625,14,MUTED);}\n            if(!app.assets.ready&&!app.options)text("Select New Game')
+  text=text.replace('if(!app.assets.ready&&!app.options)text("Select New Game', 'if(app.options)text(app.detectedDisplay,45,625,14,MUTED);\n            if(!app.assets.ready&&!app.options)text("Select New Game')
  (out/(n+'.java')).write_text(text,encoding='utf-8')
 s=(source/'MainActivity.java').read_text(encoding='utf-8-sig')
 fields=s[s.index('    static final double MENU_REVEAL_DURATION'):s.index('    void openProjectPage()')]
@@ -34,11 +34,11 @@ frame=frame.replace('if(state.running)audio.update(state);', 'if(state.running){
 frame=frame.replace('primary.repaint();', 'if(measured)performance.updates.add(System.nanoTime()-updateStarted);primary.repaint();')
 logic=s[s.index('    void releaseInputs()'):s.index('    @Override public void onBackPressed')]
 logic=logic.replace('"Import Steam file"','"Scan / import Steam copy"')
-logic=logic.replace('"Import local font","GitHub project","Back"', '"Import local font",checkingUpdates?"Checking GitHub...":"Check for updates","Rendering: "+android.view.View.RENDER_MODES[renderMode],"GitHub project","Back"')
+logic=logic.replace('"Import local font","Check for updates","GitHub project","Back"', '"Import local font",checkingUpdates?"Checking GitHub...":"Check for updates","Rendering: "+android.view.View.RENDER_MODES[renderMode],"GitHub project","Back"')
 logic=logic.replace('"Controller check"', '"Performance / controller report"')
-logic=logic.replace('new int[]{17,18,10,2,3,4,5,6,7,16,21,11}', 'new int[]{17,18,10,2,3,4,5,6,7,16,19,20,21,11}')
+logic=logic.replace('new int[]{17,18,10,2,3,4,5,6,7,16,19,21,11}', 'new int[]{17,18,10,2,3,4,5,6,7,16,19,20,21,11}')
 logic=logic.replace('case 4: diagnostic = true; break;', 'case 4:showPerformanceReport();break;')
-logic=logic.replace('case 18:', 'case 20:cycleRenderer();break;\n            case 19:checkForUpdates();break;\n            case 18:')
+logic=logic.replace('case 18:', 'case 20:cycleRenderer();break;\n            case 18:')
 logic=logic.replace('void releaseInputs() {', 'void releaseInputs() { desktopLeft=desktopRight=false;')
 inputs=s[s.index('    boolean handleKey('):s.index('    String diagnostics()')]
 inputs=inputs.replace('if(assets.importing)return true;','if(assets.importing||scanningSteam)return true;')

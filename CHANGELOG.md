@@ -1,3 +1,18 @@
+# 0.1.4 Android preview — prepared 2026-10-06
+
+- Adds **Options → Check for updates** and a visible installed version.
+- Finds Android releases separately from Windows, downloads APKs with progress
+  and cancellation, and verifies their checksum, package, version, and signing identity.
+- Opens Android's install-source permission page when needed, then its normal
+  update confirmation. The existing package and signing identity are unchanged.
+- Keeps a verified download for retry after cancelling the system installer;
+  removes it after a successful update. Private saves and Steam imports stay in place.
+- Adds connection/unavailable-release messages and a release-notes link.
+- Shared gameplay and Windows behavior remain unchanged. Android 8.0+ remains supported.
+- Local verification: 23 update checks, emulator APK/provider checks, and a real
+  Android installer upgrade preserving private test data/preferences. Public live
+  download verification and publication are blocked by GitHub account suspension.
+
 # 0.2.5 Windows preview — 2026-10-06
 
 - Adds **freddyfiles.exe**, a per-user installer with Start menu and optional desktop

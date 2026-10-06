@@ -17,3 +17,6 @@ jobs:
       - name: Run asset-free test suites
         shell: pwsh
         run: ./Test.ps1
+      - name: Android update verification tests
+        shell: pwsh
+        run: ./Test-AndroidUpdates.ps1
