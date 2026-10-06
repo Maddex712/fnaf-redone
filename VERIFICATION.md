@@ -1,5 +1,15 @@
 # Release verification — 2026-10-06
 
+## FNaF Redone 0.1.2 branding update
+
+- APK rebuilt with label `FNaF Redone`, version `0.1.2-preview`, and version code 3.
+- Package `dev.thor.fnaf.preview` and the signing identity are unchanged.
+- All six JVM suites passed again (31,642 assertions); APK signature verification passed.
+- Java gameplay/runtime sources are unchanged from the 0.1.1 preview.
+- This branding update has not received a separate on-device playthrough.
+
+## Original 0.1.1 verification
+
 Version: 0.1.1-preview, Android version code 2, public preview package `dev.thor.fnaf.preview`.
 
 ## Completed checks

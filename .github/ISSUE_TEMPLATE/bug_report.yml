@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible problem with FNaF Thor.
+description: Report a reproducible problem with FNaF Redone.
 title: "[Bug]: "
 body:
   - type: markdown
@@ -9,7 +9,7 @@ body:
     id: version
     attributes:
       label: App version
-      placeholder: 0.1.1-preview
+      placeholder: 0.1.2-preview
     validations:
       required: true
   - type: input

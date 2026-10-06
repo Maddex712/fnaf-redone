@@ -1,3 +1,11 @@
+# 0.1.2 preview — 2026-10-06
+
+- Renames the project and Android launcher label to **FNaF Redone**.
+- Updates the repository, banner, documentation, and release download names.
+- Keeps `dev.thor.fnaf.preview` and the signing identity, so installing this update
+  over the previous public preview preserves saves and imported Steam data.
+- Gameplay and single-/dual-screen behavior are unchanged.
+
 # 0.1.1 preview — 2026-10-06
 
 - Packages the latest FNaF 1 local project as a separately maintained public build.

@@ -1,26 +1,26 @@
 <div align="center">
 
-<img src="docs/images/banner.svg" alt="FNaF Thor — Your shift. Two screens." width="100%" />
+<img src="docs/images/banner.svg" alt="FNaF Redone — Your shift. Your screen." width="100%" />
 
-**A native Android reimagining of Five Nights at Freddy’s 1.**
+**Five Nights at Freddy’s 1, with more ways to play on Android.**
 
 Built for AYN Thor. Play on one screen or two. Bring your own Steam copy.
 
-[![Preview](https://img.shields.io/badge/release-0.1.1_preview-d8bc7e?style=flat-square)](https://github.com/MjonirMade/fnaf-thor/releases/tag/v0.1.1-preview)
+[![Preview](https://img.shields.io/badge/release-0.1.2_preview-d8bc7e?style=flat-square)](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.2-preview)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-9bbe91?style=flat-square)](docs/COMPATIBILITY.md)
-[![Tests](https://github.com/MjonirMade/fnaf-thor/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/MjonirMade/fnaf-thor/actions/workflows/tests.yml)
+[![Tests](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/MjonirMade/fnaf-redone/actions/workflows/tests.yml)
 [![Code license](https://img.shields.io/badge/code-MIT-a5a9b2?style=flat-square)](LICENSE)
 
-### [Download APK](https://github.com/MjonirMade/fnaf-thor/releases/download/v0.1.1-preview/FNaF-Thor-0.1.1-preview.apk) · [Setup guide](docs/INSTALL.md) · [Report a bug](https://github.com/MjonirMade/fnaf-thor/issues/new?template=bug_report.yml)
+### [Download APK](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.1.2-preview/FNaF-Redone-0.1.2-preview.apk) · [Setup guide](docs/INSTALL.md) · [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
 
 </div>
 
-![FNaF Thor title screen captured on AYN Thor](docs/images/title.png)
+![FNaF Redone title screen captured on AYN Thor](docs/images/title.png)
 
 ## Welcome to the night shift
 
 The office belongs on the top screen. The cameras belong in your hands.
-FNaF Thor pairs the familiar doors, lights, power management, and camera survival
+FNaF Redone pairs the familiar doors, lights, power management, and camera survival
 loop with native controller support, a companion terminal, and unlockable office
 cosmetics. On a single-screen device, the office and cameras fill the same display.
 
@@ -59,7 +59,7 @@ Single-screen users can open the same information from **Options → Shift dashb
 **You need Android 8.0+, 1.5 GB free during setup, and your purchased Windows Steam
 copy of FNaF 1.** AYN Thor is the primary device; single-screen support is included.
 
-1. [Download and install the APK](https://github.com/MjonirMade/fnaf-thor/releases/tag/v0.1.1-preview). It appears as **FNaF Thor Preview**.
+1. [Download and install the APK](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.2-preview). It appears as **FNaF Redone**.
 2. On your PC, open Steam → FNaF 1 → Manage → **Browse local files**.
 3. Copy **FiveNightsatFreddys.exe** to your Android device’s Downloads folder.
 4. Open the app → **New Game → Select Steam File**, and choose that file.

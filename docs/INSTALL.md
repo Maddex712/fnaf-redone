@@ -13,14 +13,14 @@ include the original game's gameplay images or audio.
 
 ## First launch
 
-1. Download the APK from [Releases](https://github.com/MjonirMade/fnaf-thor/releases/tag/v0.1.1-preview).
-2. Install it on Android. It appears as **FNaF Thor Preview**. Allow installation
+1. Download the APK from [Releases](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.2-preview).
+2. Install it on Android. It appears as **FNaF Redone**. Allow installation
    from your chosen browser/file manager if Android prompts you.
 3. On your PC, open Steam → Library → Five Nights at Freddy’s → Manage →
    Browse local files.
 4. Copy **FiveNightsatFreddys.exe** to Android’s **Downloads** folder. Copy the
    actual file, not a desktop shortcut. Do not send your Steam account details.
-5. Open FNaF Thor Preview → **New Game → Select Steam File**. In the Android
+5. Open FNaF Redone → **New Game → Select Steam File**. In the Android
    file picker, open Downloads and select the executable.
 6. Keep the app open until **Ready to play** appears, then start New Game.
 
@@ -55,6 +55,10 @@ The public preview uses **dev.thor.fnaf.preview**, so it can coexist with the ol
 private FNaF Thor app. Each app has its own saves and imported data. This release
 does not migrate progress from the private app.
 
+If you already installed **FNaF Thor Preview (0.1.1)**, install FNaF Redone over it.
+The public preview's package and signing identity are unchanged, so its saves and
+imported data stay in place. Do not uninstall it before updating.
+
 Install future compatible APKs over the preview to retain its local progress.
 Importing replacement game data does not reset achievements or purchases.
 **Uninstalling or clearing app data deletes local saves and imported assets.**
@@ -71,6 +75,6 @@ There is no cloud save or Steam save synchronization.
 | Unexpected controller buttons | Options → Controller check / Remap buttons. |
 | App cannot update | Check the package and signing identity. Do not uninstall without considering save loss. |
 
-Still stuck? [Report a bug](https://github.com/MjonirMade/fnaf-thor/issues/new?template=bug_report.yml)
+Still stuck? [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
 with your device, Android version, app version, steps, and visible error.
 Never attach the game EXE, extracted game assets, credentials, or personal data.
