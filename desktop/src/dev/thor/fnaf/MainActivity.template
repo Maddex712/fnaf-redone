@@ -206,11 +206,39 @@ public final class MainActivity extends Context {
                 checkingUpdates=false;if(closed)return;
                 try{
                     ReleaseUpdates.Result result=get();
-                    int choice=JOptionPane.showOptionDialog(window,result.message,"FNaF Redone updates",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{result.newer?"Open download page":"Open releases","Close"},"Close");
-                    if(choice==0)java.awt.Desktop.getDesktop().browse(java.net.URI.create(result.url));
+                    String message=result.message+(result.installable()?"\n\nInstalls in this folder and restarts the game.\nSaves and imported Steam data are preserved."+(state.running?"\nYour current night will end.":""):"");
+                    int choice=JOptionPane.showOptionDialog(window,message,"FNaF Redone updates",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{result.installable()?"Install and restart":result.newer?"Open download page":"Open releases","Close"},"Close");
+                    if(choice==0){if(result.installable())installUpdate(result);else java.awt.Desktop.getDesktop().browse(java.net.URI.create(result.url));}
                 }catch(Exception e){JOptionPane.showMessageDialog(window,"Could not open the update page. Visit github.com/MjonirMade/fnaf-redone/releases.");}
             }
         }.execute();
+    }
+    void installUpdate(ReleaseUpdates.Result release){
+        if(checkingUpdates||assets.importing)return;
+        checkingUpdates=true;state.pause();releaseInputs();
+        JDialog dialog=new JDialog(window,"Updating FNaF Redone",true);dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        JLabel status=new JLabel("Preparing update...");JProgressBar bar=new JProgressBar();bar.setIndeterminate(true);
+        JButton cancel=new JButton("Cancel");java.util.concurrent.atomic.AtomicBoolean cancelled=new java.util.concurrent.atomic.AtomicBoolean();
+        cancel.addActionListener(e->{cancelled.set(true);cancel.setEnabled(false);status.setText("Cancelling download...");});
+        JPanel panel=new JPanel(new java.awt.BorderLayout(12,12));panel.setBorder(BorderFactory.createEmptyBorder(22,22,22,22));panel.add(status,java.awt.BorderLayout.NORTH);panel.add(bar,java.awt.BorderLayout.CENTER);panel.add(cancel,java.awt.BorderLayout.SOUTH);
+        dialog.setContentPane(panel);dialog.setSize(480,165);dialog.setLocationRelativeTo(window);
+        new SwingWorker<Void,String>(){
+            DesktopUpdater.Staged stage;boolean handedOff;
+            protected Void doInBackground()throws Exception{
+                try{
+                    stage=DesktopUpdater.prepare(release,DesktopUpdater.installation(),getFilesDir().toPath(),s->publish(s),cancelled::get);
+                    SwingUtilities.invokeAndWait(()->{cancel.setEnabled(false);status.setText("Restarting with the update...");});
+                    DesktopUpdater.cancelled(cancelled::get);
+                    DesktopUpdater.handoff(stage);handedOff=true;return null;
+                }catch(Exception e){if(stage!=null&&!handedOff)DesktopUpdater.removeCreatedTree(stage.candidate());throw e;}
+            }
+            protected void process(java.util.List<String> messages){if(!cancelled.get())status.setText(messages.get(messages.size()-1));}
+            protected void done(){
+                checkingUpdates=false;dialog.dispose();
+                try{get();finish();}
+                catch(Exception e){if(!cancelled.get()){Throwable cause=e.getCause()==null?e:e.getCause();JOptionPane.showMessageDialog(window,"The update was not installed. Your current game is unchanged.\n"+cause.getMessage(),"Update unavailable",JOptionPane.ERROR_MESSAGE);}}
+            }
+        }.execute();dialog.setVisible(true);
     }
 /* SHARED_FRAME */
 /* SHARED_LOGIC */

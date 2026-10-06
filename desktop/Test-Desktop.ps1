@@ -3,9 +3,9 @@ $build=Join-Path $PSScriptRoot 'build'
 $tests=Join-Path $build 'tests'
 New-Item -ItemType Directory -Force $tests | Out-Null
 $classpath="$(Join-Path $build 'classes');$(Join-Path $build 'deps')/*;$tests"
-& javac --release 17 -encoding UTF-8 -cp $classpath -d $tests (Join-Path $PSScriptRoot 'tests/DesktopFramePumpTest.java') (Join-Path $PSScriptRoot 'tests/DesktopSettingsTest.java') (Join-Path $PSScriptRoot 'tests/ControllerReaderTest.java') (Join-Path $PSScriptRoot 'tests/RendererRegressionTest.java') (Join-Path $PSScriptRoot 'tests/AudioThreadTest.java')
+& javac --release 17 -encoding UTF-8 -cp $classpath -d $tests (Join-Path $PSScriptRoot 'tests/DesktopFramePumpTest.java') (Join-Path $PSScriptRoot 'tests/DesktopSettingsTest.java') (Join-Path $PSScriptRoot 'tests/ControllerReaderTest.java') (Join-Path $PSScriptRoot 'tests/RendererRegressionTest.java') (Join-Path $PSScriptRoot 'tests/AudioThreadTest.java') (Join-Path $PSScriptRoot 'tests/DesktopUpdaterTest.java')
 if($LASTEXITCODE -ne 0){throw 'Desktop test compilation failed'}
-foreach($suite in @('DesktopFramePumpTest','DesktopSettingsTest','ControllerReaderTest','RendererRegressionTest')){
+foreach($suite in @('DesktopFramePumpTest','DesktopSettingsTest','ControllerReaderTest','RendererRegressionTest','DesktopUpdaterTest')){
     & java -cp $classpath "dev.thor.fnaf.$suite"
     if($LASTEXITCODE -ne 0){throw "$suite failed"}
 }

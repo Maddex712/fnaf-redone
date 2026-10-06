@@ -1,6 +1,8 @@
 # Windows rendering investigation — 0.2.4
 
-The OXP3 owner reports stuttering camera motion and menus. No OXP3 timing report
+Update: the OXP3 owner confirmed 0.2.4 is now working flawlessly.
+
+The investigation began with stuttering camera motion and menus. No OXP3 timing report
 has been collected yet, so neither an Intel driver fault nor a hardware limitation
 has been established.
 

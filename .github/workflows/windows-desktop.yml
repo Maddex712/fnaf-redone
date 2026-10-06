@@ -31,3 +31,6 @@ jobs:
       - name: Frame scheduling, display layout, and update tests
         shell: pwsh
         run: ./desktop/Test-Desktop.ps1
+      - name: Packaged EXE update and restart
+        shell: pwsh
+        run: ./desktop/Test-PackagedUpdater.ps1

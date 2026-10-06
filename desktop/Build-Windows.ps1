@@ -16,6 +16,7 @@ foreach($dep in $downloads){$path=Join-Path $deps $dep.File;if(!(Test-Path $path
 $sources=@(Get-ChildItem (Join-Path $root 'src'),(Join-Path $out 'generated') -Recurse -Filter '*.java' | ForEach-Object FullName)
 & javac --release 17 -encoding UTF-8 -cp "$deps/*" -d $classes @sources;Check 'Compile desktop client'
 Copy-Item (Join-Path $root '../app/src/main/assets') $classes -Recurse -Force
+Copy-Item (Join-Path $root 'updater.ps1') $classes -Force
 $inputDir=Join-Path $out 'input'
 New-Item -ItemType Directory -Force $inputDir | Out-Null
 & jar --create --file (Join-Path $inputDir 'fnaf-redone.jar') --main-class dev.thor.fnaf.MainActivity -C $classes .;Check 'Create desktop JAR'
@@ -26,6 +27,7 @@ if($Package){
     & jpackage --type app-image --name 'FNaF Redone' --app-version $version --vendor 'FNaF Redone contributors' --dest $dest --input $inputDir --main-jar fnaf-redone.jar --main-class dev.thor.fnaf.MainActivity --java-options '-Xmx768m' --add-modules java.base,java.desktop,java.logging,java.prefs,java.management,jdk.unsupported,jdk.crypto.ec --jlink-options '--strip-debug --no-man-pages --no-header-files'
     Check 'Package Windows app image'
     $bundle=Join-Path $dest 'FNaF Redone'
+    Set-Content -LiteralPath (Join-Path $bundle 'app/release-version.txt') -Value ($version+'-windows-preview') -Encoding ascii
     Copy-Item (Join-Path $root 'README.md') (Join-Path $bundle 'START-HERE.md')
     foreach($notice in @('THIRD-PARTY.md','JNA-LICENSE.txt','JSON-LICENSE.txt','APACHE-2.0.txt')){Copy-Item (Join-Path $root $notice) $bundle}
     Copy-Item (Join-Path $root '../LICENSE'),(Join-Path $root '../CREDITS.md') $bundle

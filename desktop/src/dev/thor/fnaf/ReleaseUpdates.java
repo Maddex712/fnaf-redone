@@ -10,6 +10,8 @@ final class ReleaseUpdates {
     static final String PAGE="https://github.com/MjonirMade/fnaf-redone/releases";
     static final class Result {
         final String message,url;final boolean newer;
+        String tag="",assetUrl="",digest="";long size;
+        boolean installable(){return newer&&size>0&&size<=DesktopUpdater.MAX_DOWNLOAD&&digest.matches("sha256:[0-9a-fA-F]{64}")&&assetUrl.startsWith("https://github.com/MjonirMade/fnaf-redone/releases/download/"+tag+"/");}
         Result(String message,String url,boolean newer){this.message=message;this.url=url;this.newer=newer;}
     }
     static Result check(String current,String platform){
@@ -32,23 +34,26 @@ final class ReleaseUpdates {
     }
     static Result select(String json,String current,String platform)throws JSONException{
         JSONArray releases=new JSONArray(json);String best=null,url=PAGE;
+        JSONObject bestAsset=null;
         boolean windows=platform.equals("Windows");
         for(int i=0;i<releases.length();i++){
             JSONObject r=releases.getJSONObject(i);if(r.optBoolean("draft",false))continue;
             String tag=r.optString("tag_name","");if(version(tag)==null)continue;
-            JSONArray assets=r.optJSONArray("assets");boolean matches=false;
+            JSONArray assets=r.optJSONArray("assets");JSONObject match=null;
             if(assets!=null)for(int j=0;j<assets.length();j++){
                 String name=assets.getJSONObject(j).optString("name","").toLowerCase(java.util.Locale.ROOT);
-                if(name.startsWith("fnaf-redone-")&&(windows?name.contains("windows-x64")&&name.endsWith(".zip"):name.endsWith(".apk")))matches=true;
+                if(name.startsWith("fnaf-redone-")&&(windows?name.contains("windows-x64")&&name.endsWith(".zip"):name.endsWith(".apk")))match=assets.getJSONObject(j);
             }
-            if(matches&&(best==null||compare(tag,best)>0)){
+            if(match!=null&&(best==null||compare(tag,best)>0)){
+                bestAsset=match;
                 best=tag;String page=r.optString("html_url",PAGE);
                 url=page.startsWith(PAGE+"/tag/")?page:PAGE;
             }
         }
         if(best==null)return new Result("No "+platform+" download was found on GitHub yet.",PAGE,false);
         boolean newer=compare(best,current)>0;
-        return new Result(newer?"Update available: "+best+"\nInstalled: "+current+" ("+platform+")":"You're up to date.\nInstalled: "+current+" ("+platform+")",url,newer);
+        Result result=new Result(newer?"Update available: "+best+"\nInstalled: "+current+" ("+platform+")":"You're up to date.\nInstalled: "+current+" ("+platform+")",url,newer);
+        result.tag=best;result.assetUrl=bestAsset.optString("browser_download_url","");result.digest=bestAsset.optString("digest","");result.size=bestAsset.optLong("size",0);return result;
     }
     static int[] version(String text){
         java.util.regex.Matcher m=java.util.regex.Pattern.compile("^v?(\\d+)\\.(\\d+)\\.(\\d+)(?:[-+].*)?$").matcher(text);

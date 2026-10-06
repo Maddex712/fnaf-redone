@@ -1,3 +1,16 @@
+# 0.2.5 Windows preview — 2026-10-06
+
+- Adds **Check for updates → Install and restart**. Downloads the Windows release,
+  verifies GitHub's SHA-256 digest and archive structure, and stages the full app.
+- Replaces the application at its existing path after shutdown and relaunches the
+  same EXE, keeping WinHanced entries and shortcuts valid.
+- Preserves external saves/imported Steam data, keeps one previous-version backup,
+  and rolls back failed folder replacement. Downloads can be cancelled.
+- Versions 0.2.4 and earlier need one manual update into the existing folder to
+  install this updater; future updates use the in-app flow.
+- Retains the 1080p performance changes the OXP3 owner reported working flawlessly.
+- Android remains on 0.1.3 preview.
+
 # 0.2.4 Windows preview / 0.1.3 Android preview — 2026-10-06
 
 - Windows defaults to 1080p composition, including on HiDPI displays. The previous

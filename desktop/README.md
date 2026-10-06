@@ -6,7 +6,7 @@ Windows Java2D/audio/input adapter. It does not run Android or emulate the APK.
 
 ## Play
 
-1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.4-windows-preview).
+1. Download the [Windows preview ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.5-windows-preview).
 2. Extract the **entire** ZIP into a folder. Keep `app` and `runtime` beside the EXE.
 3. Run **FNaF Redone.exe**. No separate Java installation is needed.
 4. Choose **New Game → Scan Steam** (A / Enter). The client finds your installed
@@ -83,10 +83,28 @@ Paste it into a bug report. It stays local unless you choose to share it.
 **Options → GitHub project** opens this repository in your browser. Settings also
 credits Scott Cawthon and identifies this as an unofficial fan project.
 
-**Options → Check for updates** reads the public GitHub releases list in the
-background and selects the newest release with a Windows x64 ZIP. It offers to
-open that release's download page; it does not install updates automatically.
-This is a manual network check. Playing and Steam-file import remain offline.
+**Options → Check for updates → Install and restart** downloads the newest Windows
+release, verifies its SHA-256, and replaces the application in its **current folder**.
+The EXE path stays the same, so your WinHanced entry or shortcut needs no changes.
+The app restarts after replacement. Your saved progress, settings, and imported
+Steam data remain in `%LOCALAPPDATA%\FNaFRedone`. Updating ends the current night.
+
+**One-time setup from 0.2.4 or earlier:** close the game and extract this release's
+`FNaF Redone` folder contents into your existing app folder, accepting replacement.
+Keep its location and `FNaF Redone.exe` filename unchanged. Future updates can be
+installed from Options. Do not make a new version-named launcher entry.
+
+Installation is opt-in and requires internet, built-in Windows PowerShell, and write
+access to the application folder and its parent. Keep the portable app in a normal
+user-writable folder. A failed download leaves the installed game unchanged. The
+updater stages the full app, waits for the game to exit, then swaps folders. If the
+swap fails, it restores the previous app. One recovery copy is kept beside it as
+`<app-folder>.previous`; the next successful update replaces that recovery copy.
+Helper logs are under `%LOCALAPPDATA%\FNaFRedone\updates`. If an interrupted update
+leaves the app folder missing, rename the `.previous` folder back to its original name.
+
+This remains a manual update check; playing and importing Steam files work offline.
+Android updating is unchanged.
 
 Single screen is the Windows default. Office and cameras use the full viewport.
 Achievements, challenges, plushies, and the shop remain in the main menu.
