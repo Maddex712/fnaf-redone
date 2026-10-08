@@ -60,8 +60,8 @@ public final class MainActivity extends Activity implements DisplayManager.Displ
     final NightSkipChord jumpscareChord=new NightSkipChord(7);
 
     void openProjectPage(){
-        try{startActivity(new Intent(Intent.ACTION_VIEW,android.net.Uri.parse("https://github.com/MjonirMade/fnaf-redone")));}
-        catch(android.content.ActivityNotFoundException e){new android.app.AlertDialog.Builder(this).setMessage("No browser is installed. Visit github.com/MjonirMade/fnaf-redone.").setPositiveButton("OK",null).show();}
+        try{startActivity(new Intent(Intent.ACTION_VIEW,android.net.Uri.parse("https://github.com/Maddex712/fnaf-redone")));}
+        catch(android.content.ActivityNotFoundException e){new android.app.AlertDialog.Builder(this).setMessage("No browser is installed. Visit github.com/Maddex712/fnaf-redone.").setPositiveButton("OK",null).show();}
     }
     AndroidUpdater updater;
     void checkForUpdates(){updater.check();}

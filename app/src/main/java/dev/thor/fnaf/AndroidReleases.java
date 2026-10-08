@@ -7,17 +7,17 @@ import org.json.*;
 
 /** Manual, public GitHub release lookup. No Steam data or credentials are transmitted. */
 final class AndroidReleases {
-    static final String PAGE="https://github.com/MjonirMade/fnaf-redone/releases";
+    static final String PAGE="https://github.com/Maddex712/fnaf-redone/releases";
     static final class Result {
         final String message,url;final boolean newer;
         String tag="",assetUrl="",digest="";long size;
-        boolean installable(){return newer&&size>0&&size<=AndroidUpdateTransfer.MAX_BYTES&&digest.matches("sha256:[0-9a-fA-F]{64}")&&assetUrl.startsWith("https://github.com/MjonirMade/fnaf-redone/releases/download/"+tag+"/");}
+        boolean installable(){return newer&&size>0&&size<=AndroidUpdateTransfer.MAX_BYTES&&digest.matches("sha256:[0-9a-fA-F]{64}")&&assetUrl.startsWith("https://github.com/Maddex712/fnaf-redone/releases/download/"+tag+"/");}
         Result(String message,String url,boolean newer){this.message=message;this.url=url;this.newer=newer;}
     }
     static Result check(String current,String platform){
         HttpURLConnection c=null;
         try{
-            c=(HttpURLConnection)new URL("https://api.github.com/repos/MjonirMade/fnaf-redone/releases?per_page=100").openConnection();
+            c=(HttpURLConnection)new URL("https://api.github.com/repos/Maddex712/fnaf-redone/releases?per_page=100").openConnection();
             c.setConnectTimeout(6000);c.setReadTimeout(6000);
             c.setRequestProperty("Accept","application/vnd.github+json");
             c.setRequestProperty("User-Agent","FNaF-Redone/"+current);

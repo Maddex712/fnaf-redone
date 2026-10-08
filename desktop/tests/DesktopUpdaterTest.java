@@ -28,7 +28,7 @@ public final class DesktopUpdaterTest {
     public static void main(String[] args)throws Exception{
         Path temp=Files.createTempDirectory("fnaf update & owner's test ");
         try{
-            String json="[{\"tag_name\":\"v0.2.9-windows-preview\",\"assets\":[{\"name\":\"FNaF-Redone-0.2.9-Windows-x64-preview.zip\",\"size\":100,\"digest\":\"sha256:"+"a".repeat(64)+"\",\"browser_download_url\":\"https://github.com/MjonirMade/fnaf-redone/releases/download/v0.2.9-windows-preview/update.zip\"}]}]";
+            String json="[{\"tag_name\":\"v0.2.9-windows-preview\",\"assets\":[{\"name\":\"FNaF-Redone-0.2.9-Windows-x64-preview.zip\",\"size\":100,\"digest\":\"sha256:"+"a".repeat(64)+"\",\"browser_download_url\":\"https://github.com/Maddex712/fnaf-redone/releases/download/v0.2.9-windows-preview/update.zip\"}]}]";
             check(ReleaseUpdates.select(json,"0.2.5-windows-preview","Windows").installable(),"Verified release offers installation");
             check(!ReleaseUpdates.select(json.replace("sha256:","md5:"),"0.2.5-windows-preview","Windows").installable(),"Missing checksum prevents install");
             check(!ReleaseUpdates.select(json.replace("https://github.com/","https://evil.example/"),"0.2.5-windows-preview","Windows").installable(),"Foreign download refused");

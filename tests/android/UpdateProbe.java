@@ -16,7 +16,7 @@ public final class UpdateProbe extends Instrumentation {
         try{
             Context context=getTargetContext();String mode=arguments.getString("mode","prepare");
             if(mode.equals("network")){
-                java.net.HttpURLConnection connection=(java.net.HttpURLConnection)new java.net.URL("https://api.github.com/repos/MjonirMade/fnaf-redone/releases?per_page=100").openConnection();
+                java.net.HttpURLConnection connection=(java.net.HttpURLConnection)new java.net.URL("https://api.github.com/repos/Maddex712/fnaf-redone/releases?per_page=100").openConnection();
                 connection.setConnectTimeout(10000);connection.setReadTimeout(10000);connection.setRequestProperty("User-Agent","FNaF-Redone-Test");
                 int code=connection.getResponseCode();
                 if(code!=200){result.putString("stream","GitHub HTTP "+code);finish(-1,result);return;}
@@ -31,7 +31,7 @@ public final class UpdateProbe extends Instrumentation {
             if(mode.equals("check")){runOnMainSync(()->app.checkForUpdates());result.putString("stream","Checking live release");finish(-1,result);return;}
             File marker=new File(context.getFilesDir(),"update-test-marker.txt");
             if(mode.equals("verify")){
-                check(app.updater.version().equals("0.1.4-preview"),"Final release installed");
+                check(app.updater.version().equals("0.1.5-preview"),"Final release installed");
                 check(new String(java.nio.file.Files.readAllBytes(marker.toPath()),"UTF-8").equals("preserved"),"Private data survived");
                 check(context.getSharedPreferences("update-test",0).getInt("points",0)==98765,"Preferences survived");
                 check(app.updater.readPending()==null,"Installed update cache cleared");
@@ -45,12 +45,12 @@ public final class UpdateProbe extends Instrumentation {
             java.nio.file.Files.copy(source.toPath(),target.toPath(),java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             MessageDigest hash=MessageDigest.getInstance("SHA-256");try(InputStream in=new FileInputStream(source)){byte[] b=new byte[65536];int n;while((n=in.read(b))!=-1)hash.update(b,0,n);}
             AndroidReleases.Result update=new AndroidReleases.Result("",AndroidReleases.PAGE,true);
-            update.tag="v0.1.4-preview";update.size=source.length();update.digest="sha256:"+AndroidUpdateTransfer.hex(hash.digest());
-            update.assetUrl="https://github.com/MjonirMade/fnaf-redone/releases/download/"+update.tag+"/FNaF-Redone-0.1.4-preview.apk";
+            update.tag="v0.1.5-preview";update.size=source.length();update.digest="sha256:"+AndroidUpdateTransfer.hex(hash.digest());
+            update.assetUrl="https://github.com/Maddex712/fnaf-redone/releases/download/"+update.tag+"/FNaF-Redone-0.1.5-preview.apk";
             app.updater.validateApk(update);checks++;
             AndroidUpdateTransfer.verify(target,update.size,update.digest);checks++;
             update.tag="v9.9.9-preview";boolean refused=false;try{app.updater.validateApk(update);}catch(IOException e){refused=true;}
-            check(refused,"Reject mismatched APK version");update.tag="v0.1.4-preview";
+            check(refused,"Reject mismatched APK version");update.tag="v0.1.5-preview";
             Uri uri=UpdateApkProvider.uri(context);
             try(InputStream in=context.getContentResolver().openInputStream(uri)){check(in.read()=='P',"Read-only provider serves APK");}
             refused=false;try{context.getContentResolver().openOutputStream(uri).close();}catch(Exception e){refused=true;}

@@ -183,7 +183,7 @@ namespace FreddyFiles {
                 key.SetValue("Publisher", "FNaF Redone contributors"); key.SetValue("InstallLocation", target);
                 key.SetValue("DisplayIcon", Path.Combine(target, "FNaF Redone.exe"));
                 key.SetValue("UninstallString", "\"" + Path.Combine(Maintenance(target), "uninstall.exe") + "\"");
-                key.SetValue("URLInfoAbout", "https://github.com/MjonirMade/fnaf-redone");
+                key.SetValue("URLInfoAbout", "https://github.com/Maddex712/fnaf-redone");
                 key.SetValue("NoModify", 1); key.SetValue("NoRepair", 1);
             }
             Shortcut(Path.Combine(StartMenu, Game + ".lnk"), Path.Combine(target, Game + ".exe"));

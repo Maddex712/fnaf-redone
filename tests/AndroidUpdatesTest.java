@@ -12,7 +12,7 @@ public final class AndroidUpdatesTest {
     static JSONObject release(String tag,String name,String digest)throws Exception{
         return new JSONObject().put("tag_name",tag).put("html_url",AndroidReleases.PAGE+"/tag/"+tag)
             .put("assets",new JSONArray().put(new JSONObject().put("name",name).put("size",100)
-                .put("digest",digest).put("browser_download_url","https://github.com/MjonirMade/fnaf-redone/releases/download/"+tag+"/"+name)));
+                .put("digest",digest).put("browser_download_url","https://github.com/Maddex712/fnaf-redone/releases/download/"+tag+"/"+name)));
     }
     public static void main(String[] args)throws Exception{
         String digest="sha256:"+new String(new char[64]).replace('\0','a');

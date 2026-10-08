@@ -54,7 +54,7 @@ The inner build-tools directory name is not significant. Use the complete
 Android build-tools 35 distribution, not just the files listed above.
 `javac`, `java`, and `jar` must be available from your JDK installation.
 
-The source builds package `dev.thor.fnaf.preview`, version `0.1.4-preview`.
+The source builds package `dev.thor.fnaf.preview`, version `0.1.5-preview`.
 Supply your own signing key; publisher keys and passwords are never checked in.
 GitHub CI tests source only and does not publish or sign APKs.
 

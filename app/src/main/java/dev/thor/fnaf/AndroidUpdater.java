@@ -31,7 +31,7 @@ final class AndroidUpdater {
     void message(String title,String message){
         dialog=new AlertDialog.Builder(app).setTitle(title).setMessage(message).setPositiveButton("OK",null).show();
     }
-    void releases(){try{app.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(AndroidReleases.PAGE)));}catch(ActivityNotFoundException e){message("Releases","Visit github.com/MjonirMade/fnaf-redone/releases in a browser.");}}
+    void releases(){try{app.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(AndroidReleases.PAGE)));}catch(ActivityNotFoundException e){message("Releases","Visit github.com/Maddex712/fnaf-redone/releases in a browser.");}}
     File metadata(){return new File(app.getCacheDir(),"updates/release.json");}
     void check(){
         if(busy)return;

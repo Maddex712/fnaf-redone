@@ -50,3 +50,24 @@ checks. Single-screen phones/tablets and different Android file providers still
 need physical-device testing. This pass does not certify every night or claim
 frame-perfect parity with the original Windows game. Emulator audio was muted;
 WAV integrity was checked, not a new recorded listening test.
+# Repository migration — 2026-10-08
+
+Android 0.1.5 and Windows 0.2.6 use Maddex712/fnaf-redone for project links,
+release discovery, and verified downloads. The migration retains all 15 previous
+local commits, including the two Android updater commits not previously pushed.
+
+- Shared simulation, progression, intro/outro, title and screen-mode suites: 31,642 assertions passed.
+- Android release selection and update verification: 23 checks passed.
+- Android package identity remains `dev.thor.fnaf.preview`; version code is 6.
+  APK v2/v3 signatures verified; signing certificate matches Android 0.1.4.
+- Desktop frame scheduling, display/update settings, controller delivery, rendering,
+  audio isolation, updater and Steam discovery suites passed.
+- Packaged Windows EXE updater handoff, runtime replacement, same-path restart
+  and save preservation passed.
+- FreddyFiles installer/update/uninstall round trip: 31 checks passed.
+- Source-only publication scan: 147 files, zero failures or warnings.
+- Extracted APK, Windows package and application JAR scan: 299 files, zero failures
+  or warnings, including comparison against the locally owned Steam installation.
+
+This migration did not repeat gameplay testing on the physical Thor or OXP3.
+Earlier hardware testing below remains the evidence for those devices.

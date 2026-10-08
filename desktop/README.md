@@ -6,7 +6,7 @@ Windows Java2D/audio/input adapter. It does not run Android or emulate the APK.
 
 ## Play
 
-1. Download [**freddyfiles.exe**](https://github.com/MjonirMade/fnaf-redone/releases/download/v0.2.5-windows-preview/freddyfiles.exe).
+1. Download [**freddyfiles.exe**](https://github.com/Maddex712/fnaf-redone/releases/download/v0.2.6-windows-preview/freddyfiles.exe).
 2. Run FreddyFiles and select **Install**. It installs for your Windows account without administrator access.
 3. Open **FNaF Redone** from its Start menu or desktop shortcut. No separate Java installation is needed.
 4. Choose **New Game → Scan Steam** (A / Enter). The client finds your installed
@@ -27,9 +27,14 @@ Close the game first. A replaced installation is retained beside it in a
 The installer refuses to replace a newer game version or an unrelated folder.
 It uses Windows' .NET Framework 4.8, included with current Windows 10/11 installations.
 
-Prefer no installer? The [portable ZIP](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.2.5-windows-preview)
+Prefer no installer? The [portable ZIP](https://github.com/Maddex712/fnaf-redone/releases/tag/v0.2.6-windows-preview)
 is still available. Extract the entire folder, keeping `app` and `runtime` beside
 the EXE. The in-game updater uses this ZIP for both installation types.
+
+**Moving from the previous GitHub account:** run the 0.2.6 FreddyFiles installer
+and select your existing game folder. Older builds query the previous account
+and cannot discover this repository. Your EXE path, saves and Steam imports stay
+in place; subsequent in-game update checks use Maddex712/fnaf-redone.
 
 To uninstall, use **Windows Settings → Apps → FNaF Redone → Uninstall** or the
 Start menu uninstall shortcut. Saves and imported Steam files are kept in

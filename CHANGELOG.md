@@ -1,3 +1,13 @@
+# 0.1.5 Android / 0.2.6 Windows preview — 2026-10-08
+
+- Moves the project to **Maddex712/fnaf-redone**, preserving the complete local Git history.
+- Updates both apps' GitHub links, release feeds, and verified download allowlists.
+- Includes all earlier changes, including the Android updater and cached version label.
+- Rebuilds the Android APK, Windows portable client, and FreddyFiles installer.
+- Existing builds pointing to the old account need one manual update. Install the APK
+  over the existing Android app, or select the existing Windows game folder in
+  FreddyFiles. Keep existing saves and imported Steam data; do not uninstall first.
+
 # 0.1.4 Android preview — prepared 2026-10-06
 
 - Adds **Options → Check for updates** and a visible installed version.

@@ -196,8 +196,8 @@ public final class MainActivity extends Context {
     }
     String versionLabel(){return "FNaF Redone "+ReleaseConfig.VERSION;}
     void openProjectPage(){
-        try{java.awt.Desktop.getDesktop().browse(java.net.URI.create("https://github.com/MjonirMade/fnaf-redone"));}
-        catch(Exception e){JOptionPane.showMessageDialog(window,"Could not open your browser. Visit github.com/MjonirMade/fnaf-redone.");}
+        try{java.awt.Desktop.getDesktop().browse(java.net.URI.create("https://github.com/Maddex712/fnaf-redone"));}
+        catch(Exception e){JOptionPane.showMessageDialog(window,"Could not open your browser. Visit github.com/Maddex712/fnaf-redone.");}
     }
     void checkForUpdates(){
         if(checkingUpdates)return;checkingUpdates=true;
@@ -210,7 +210,7 @@ public final class MainActivity extends Context {
                     String message=result.message+(result.installable()?"\n\nInstalls in this folder and restarts the game.\nSaves and imported Steam data are preserved."+(state.running?"\nYour current night will end.":""):"");
                     int choice=JOptionPane.showOptionDialog(window,message,"FNaF Redone updates",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{result.installable()?"Install and restart":result.newer?"Open download page":"Open releases","Close"},"Close");
                     if(choice==0){if(result.installable())installUpdate(result);else java.awt.Desktop.getDesktop().browse(java.net.URI.create(result.url));}
-                }catch(Exception e){JOptionPane.showMessageDialog(window,"Could not open the update page. Visit github.com/MjonirMade/fnaf-redone/releases.");}
+                }catch(Exception e){JOptionPane.showMessageDialog(window,"Could not open the update page. Visit github.com/Maddex712/fnaf-redone/releases.");}
             }
         }.execute();
     }

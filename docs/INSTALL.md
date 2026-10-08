@@ -13,7 +13,7 @@ include the original game's gameplay images or audio.
 
 ## First launch
 
-1. Download the APK from [Releases](https://github.com/MjonirMade/fnaf-redone/releases/tag/v0.1.4-preview).
+1. Download the APK from [Releases](https://github.com/Maddex712/fnaf-redone/releases/tag/v0.1.5-preview).
 2. Install it on Android. It appears as **FNaF Redone**. Allow installation
    from your chosen browser/file manager if Android prompts you.
 3. On your PC, open Steam → Library → Five Nights at Freddy’s → Manage →
@@ -79,8 +79,9 @@ installed. Connection failures, unavailable releases, and GitHub request limits
 leave the current app unchanged. Update checks are manual; no GitHub/Steam login
 is needed, and playing/importing still works offline.
 
-**One-time setup from 0.1.3 or earlier:** install the 0.1.4 APK over your current
-public preview to get the updater. Do not uninstall first.
+**One-time migration from 0.1.4 or earlier:** install the 0.1.5 APK over your current
+public preview to connect its updater to Maddex712/fnaf-redone. Earlier builds
+still query the previous GitHub account. Do not uninstall first.
 
 You can also install future compatible APKs over the preview manually.
 Importing replacement game data does not reset achievements or purchases.
@@ -98,6 +99,6 @@ There is no cloud save or Steam save synchronization.
 | Unexpected controller buttons | Options → Controller check / Remap buttons. |
 | App cannot update | Check the package and signing identity. Do not uninstall without considering save loss. |
 
-Still stuck? [Report a bug](https://github.com/MjonirMade/fnaf-redone/issues/new?template=bug_report.yml)
+Still stuck? [Report a bug](https://github.com/Maddex712/fnaf-redone/issues/new?template=bug_report.yml)
 with your device, Android version, app version, steps, and visible error.
 Never attach the game EXE, extracted game assets, credentials, or personal data.
