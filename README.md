@@ -16,7 +16,7 @@ Single- and dual-screen support. Bring your own Steam copy. Windows x64 client a
 
 </div>
 
-![FNaF Redone title screen captured on AYN Thor](docs/images/title.png)
+![FNaF Redone title screen captured on AYN Thor](https://github.com/user-attachments/assets/f28f035a-ea92-4fb2-98d8-d63bd8c1f2ee)
 
 ## Welcome to the night shift
 
