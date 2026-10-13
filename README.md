@@ -6,13 +6,13 @@
 
 Single- and dual-screen support. Bring your own Steam copy. Windows x64 client also available.
 
-[![Preview](https://img.shields.io/badge/release-0.1.5_preview-d8bc7e?style=flat-square)](https://github.com/Maddex712/fnaf-redone/releases/tag/v0.1.5-preview)
+[![Preview](https://img.shields.io/badge/release-0.1.5_preview-d8bc7e?style=flat-square)](https://github.com/Maddex712/fnaf-redone-again/releases/tag/v0.1.5-android-preview)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-9bbe91?style=flat-square)](docs/COMPATIBILITY.md)
 [![Windows](https://img.shields.io/badge/Windows-x64_preview-a5a9b2?style=flat-square)](desktop/README.md)
-[![Tests](https://github.com/Maddex712/fnaf-redone/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Maddex712/fnaf-redone/actions/workflows/tests.yml)
+[![Tests](https://github.com/Maddex712/fnaf-redone-again/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Maddex712/fnaf-redone-again/actions/workflows/tests.yml)
 [![Code license](https://img.shields.io/badge/code-MIT-a5a9b2?style=flat-square)](LICENSE)
 
-### [Android APK](https://github.com/Maddex712/fnaf-redone/releases/download/v0.1.5-preview/FNaF-Redone-0.1.5-preview.apk) · [Windows installer](https://github.com/Maddex712/fnaf-redone/releases/download/v0.2.6-windows-preview/freddyfiles.exe) · [Report a bug](https://github.com/Maddex712/fnaf-redone/issues/new?template=bug_report.yml)
+### [Android APK](https://github.com/Maddex712/fnaf-redone-again/releases/download/v0.1.5-android-preview/FNaF-Redone-0.1.5-preview.apk) · [Windows installer](https://github.com/Maddex712/fnaf-redone-again/releases/download/v0.2.6-windows-preview/freddyfiles.exe) · [Report a bug](https://github.com/Maddex712/fnaf-redone-again/issues/new?template=bug_report.yml)
 
 </div>
 
@@ -61,8 +61,7 @@ Single-screen users can open the same information from **Options → Shift dashb
 **On Windows?** Download **freddyfiles.exe**, run it, and select **Install**.
 Open **FNaF Redone** from its shortcut. Choose **New Game → Scan Steam** to find and import your
 installed FNaF 1 copy automatically, or **Browse File** to select it yourself.
-No separate Java installation is needed. Already using WinHanced? Select your existing
-game folder during installation to keep its EXE path. The portable ZIP remains available.
+No separate Java installation is needed. A portable ZIP is also available if you prefer to run without an installer.
 [Windows setup and controls](desktop/README.md).
 
 **On Android:**
@@ -71,7 +70,7 @@ game folder during installation to keep its EXE path. The portable ZIP remains a
 copy of FNaF 1.** Supports single- and dual-screen Android handhelds; see the
 [compatibility notes](docs/COMPATIBILITY.md) for tested hardware.
 
-1. [Download and install the APK](https://github.com/Maddex712/fnaf-redone/releases/tag/v0.1.5-preview). It appears as **FNaF Redone**.
+1. [Download and install the APK](https://github.com/Maddex712/fnaf-redone-again/releases/tag/v0.1.5-android-preview). It appears as **FNaF Redone**.
 2. On your PC, open Steam → FNaF 1 → Manage → **Browse local files**.
 3. Copy **FiveNightsatFreddys.exe** to your Android device’s Downloads folder.
 4. Open the app → **New Game → Select Steam File**, and choose that file.
@@ -82,17 +81,9 @@ images and sounds on the device. Only the verified Steam build is currently
 supported; check the [file hash and requirements](docs/COMPATIBILITY.md) if import
 fails. The Steam game’s original gameplay assets are not bundled in the download.
 
-The preview installs alongside the earlier private app, with separate saves.
-Android **Options → Check for updates** downloads and verifies new APKs, then
-opens Android's install prompt. Settings shows your installed version. Install
-0.1.5 over an older public preview once to connect to the new repository; keep the app installed
-to preserve its saves and imported data.
-[Read the setup guide](docs/INSTALL.md) for updates, display settings, fonts, and troubleshooting.
-
-**Moving from the previous GitHub account:** older apps cannot find this repository
-automatically. Install Android 0.1.5 over the existing app, or run the Windows 0.2.6
-FreddyFiles installer and choose your existing game folder. Future update checks
-use this repository. Do not uninstall first; keep your saves and Steam imports.
+For future updates, use **Options → Check for updates** or download a newer APK
+from this repository. Keep the app installed to preserve progress and imported
+game data. [Read the setup guide](docs/INSTALL.md) for display settings and troubleshooting.
 
 ## One screen or two
 

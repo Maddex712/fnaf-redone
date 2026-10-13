@@ -13,7 +13,7 @@ include the original game's gameplay images or audio.
 
 ## First launch
 
-1. Download the APK from [Releases](https://github.com/Maddex712/fnaf-redone/releases/tag/v0.1.5-preview).
+1. Download the APK from [Releases](https://github.com/Maddex712/fnaf-redone-again/releases/tag/v0.1.5-android-preview).
 2. Install it on Android. It appears as **FNaF Redone**. Allow installation
    from your chosen browser/file manager if Android prompts you.
 3. On your PC, open Steam → Library → Five Nights at Freddy’s → Manage →
@@ -27,7 +27,7 @@ include the original game's gameplay images or audio.
 Import takes place entirely on Android. No PC extractor, Python, .NET, Windows
 emulator, Steam login, or network connection is required. After a successful
 import, the extra EXE in Downloads can be deleted to reclaim space.
-An existing `fnaf1-steam-284` data ZIP is also supported.
+
 
 ## Display settings
 
@@ -45,47 +45,18 @@ display falls back to single-screen mode.
 ## Font
 
 Menus use Android’s built-in monospace font by default. You can import a font you
-are entitled to use through **Options → Import local font**. The development
-build used `consola.ttf` from Windows; it is not bundled here. Title and night-card
+are entitled to use through **Options → Import local font**. Title and night-card
 art imported from your game retains its original lettering.
 
 ## Updates, saves, and uninstalling
 
-The public preview uses **dev.thor.fnaf.preview**, so it can coexist with the older
-private FNaF Thor app. Each app has its own saves and imported data. This release
-does not migrate progress from the private app.
+Use **Options → Check for updates** to download future Android releases.
+Android asks you to approve installation. You can also download and install a
+newer APK from this repository over the installed app.
 
-If you already installed **FNaF Thor Preview (0.1.1)**, install FNaF Redone over it.
-The public preview's package and signing identity are unchanged, so its saves and
-imported data stay in place. Do not uninstall it before updating.
-
-From **0.1.4**, use **Options → Check for updates**. The Options screen shows your
-installed version. The check selects Android APK releases, ignoring Windows builds.
-Choose **Download update** to see progress; **Cancel** stops the download. The app
-checks the complete file's SHA-256, package name, version, and signing certificate
-before opening Android's package installer. Missing verification information never
-starts an automatic installation; use **Release notes** to view GitHub instead.
-
-On first use, Android may require **Allow from this source** for FNaF Redone.
-The app opens that permission page and continues when you return. Android still
-asks you to approve the actual installation; the game cannot install silently.
-Installing closes the game and ends any current night. Your app icon, saves,
-settings, achievements, purchases, and imported files remain in place.
-
-If you choose **Later**, cancel Android's installer, or leave the permission page,
-check again and select **Install downloaded update**. A complete verified APK is
-kept for retry without downloading it again, and removed once that version is
-installed. Connection failures, unavailable releases, and GitHub request limits
-leave the current app unchanged. Update checks are manual; no GitHub/Steam login
-is needed, and playing/importing still works offline.
-
-**One-time migration from 0.1.4 or earlier:** install the 0.1.5 APK over your current
-public preview to connect its updater to Maddex712/fnaf-redone. Earlier builds
-still query the previous GitHub account. Do not uninstall first.
-
-You can also install future compatible APKs over the preview manually.
-Importing replacement game data does not reset achievements or purchases.
-**Uninstalling or clearing app data deletes local saves and imported assets.**
+Keep the app installed when updating: saves, settings, achievements and imported
+game data stay in place. Updates end the current night.
+**Uninstalling or clearing app storage deletes local progress and imported assets.**
 There is no cloud save or Steam save synchronization.
 
 ## Troubleshooting
@@ -99,6 +70,6 @@ There is no cloud save or Steam save synchronization.
 | Unexpected controller buttons | Options → Controller check / Remap buttons. |
 | App cannot update | Check the package and signing identity. Do not uninstall without considering save loss. |
 
-Still stuck? [Report a bug](https://github.com/Maddex712/fnaf-redone/issues/new?template=bug_report.yml)
+Still stuck? [Report a bug](https://github.com/Maddex712/fnaf-redone-again/issues/new?template=bug_report.yml)
 with your device, Android version, app version, steps, and visible error.
 Never attach the game EXE, extracted game assets, credentials, or personal data.
